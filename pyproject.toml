@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "healthcare-evidence-agent"
+version = "0.2.0"
+description = "Governed healthcare evidence agent: Claude Code runtime, 6-tool MCP server, 4 Agent Skills, and programmatic citation verification over FDA labels, ClinicalTrials.gov, and Medicare NCDs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Sai Akhilesh Vangala" }]
+keywords = ["mcp", "claude", "agents", "healthcare", "evaluation", "fda", "clinical-trials"]
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "httpx>=0.27.0",
+  "pydantic>=2.7.0",
+  "pydantic-settings>=2.3.0",
+  "python-dotenv>=1.0.0",
+  "tenacity>=8.3.0",
+  "rich>=13.7.0",
+  "mcp>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0", "ruff>=0.5.0", "matplotlib>=3.8.0"]
+claude = ["anthropic>=0.40.0"]
+
+[project.scripts]
+hea = "cmg_agent.cli:main"
+hea-eval = "cmg_agent.eval_agent:main"
+hea-mcp = "cmg_agent.mcp_server:main"
+cmg-agent = "cmg_agent.cli:main"
+cmg-eval-agent = "cmg_agent.eval_agent:main"
+cmg-mcp = "cmg_agent.mcp_server:main"
+
+[project.urls]
+Homepage = "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent"
+Repository = "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent"
+Issues = "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]

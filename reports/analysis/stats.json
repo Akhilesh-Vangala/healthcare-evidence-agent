@@ -1,0 +1,326 @@
+{
+  "n_rows": 270,
+  "configs": [
+    "A_closed_book",
+    "BASELINE",
+    "B_tools_only",
+    "C_tools_skills",
+    "D_tools_skills_sonnet"
+  ],
+  "paired_deltas": [
+    {
+      "config_a": "BASELINE",
+      "config_b": "C_tools_skills",
+      "n_tasks": 30,
+      "delta_pass_rate": 0.7333,
+      "delta_ci95": [
+        0.5778,
+        0.8778
+      ],
+      "delta_significant_vs_zero": true,
+      "contingency": {
+        "b_pass_a_fail": 22,
+        "a_pass_b_fail": 0,
+        "both_pass": 6,
+        "both_fail": 2
+      },
+      "improved_tasks": [
+        "A01",
+        "A02",
+        "C01",
+        "C02",
+        "C03",
+        "L01",
+        "L02",
+        "L03",
+        "L04",
+        "L05",
+        "L06",
+        "L07",
+        "L08",
+        "L09",
+        "L11",
+        "L12",
+        "N01",
+        "N02",
+        "R01",
+        "R02",
+        "R03",
+        "V01",
+        "V02"
+      ],
+      "regressed_tasks": []
+    },
+    {
+      "config_a": "A_closed_book",
+      "config_b": "B_tools_only",
+      "n_tasks": 30,
+      "delta_pass_rate": 0.5667,
+      "delta_ci95": [
+        0.3333,
+        0.7667
+      ],
+      "delta_significant_vs_zero": true,
+      "contingency": {
+        "b_pass_a_fail": 19,
+        "a_pass_b_fail": 2,
+        "both_pass": 5,
+        "both_fail": 4
+      },
+      "improved_tasks": [
+        "A01",
+        "A03",
+        "C01",
+        "C02",
+        "L01",
+        "L02",
+        "L03",
+        "L04",
+        "L06",
+        "L08",
+        "L09",
+        "L11",
+        "L12",
+        "N02",
+        "T01",
+        "T03",
+        "T04",
+        "V01",
+        "V02"
+      ],
+      "regressed_tasks": [
+        "R02",
+        "R03"
+      ]
+    },
+    {
+      "config_a": "B_tools_only",
+      "config_b": "C_tools_skills",
+      "n_tasks": 30,
+      "delta_pass_rate": 0.1333,
+      "delta_ci95": [
+        -0.0,
+        0.2778
+      ],
+      "delta_significant_vs_zero": false,
+      "contingency": {
+        "b_pass_a_fail": 5,
+        "a_pass_b_fail": 1,
+        "both_pass": 23,
+        "both_fail": 1
+      },
+      "improved_tasks": [
+        "A02",
+        "L05",
+        "R02",
+        "R03",
+        "T02"
+      ],
+      "regressed_tasks": [
+        "L11"
+      ]
+    },
+    {
+      "config_a": "C_tools_skills",
+      "config_b": "D_tools_skills_sonnet",
+      "n_tasks": 30,
+      "delta_pass_rate": 0.0333,
+      "delta_ci95": [
+        0.0,
+        0.0889
+      ],
+      "delta_significant_vs_zero": false,
+      "contingency": {
+        "b_pass_a_fail": 1,
+        "a_pass_b_fail": 0,
+        "both_pass": 28,
+        "both_fail": 1
+      },
+      "improved_tasks": [
+        "L05",
+        "L11"
+      ],
+      "regressed_tasks": []
+    }
+  ],
+  "failures": {
+    "A_closed_book": {
+      "config": "A_closed_book",
+      "n_runs": 60,
+      "n_failed": 46,
+      "fail_rate": 0.7667,
+      "failed_checks": {
+        "min_verified_claims": 44,
+        "required_sections": 30,
+        "review_flag": 22,
+        "min_trials": 8,
+        "covers_each_product": 4,
+        "no_invented_nct_ids": 4,
+        "required_sources": 4,
+        "status": 2,
+        "max_claims": 2
+      },
+      "failed_by_category": {
+        "label": 22,
+        "trials": 8,
+        "ambiguous_product": 6,
+        "comparison": 4,
+        "coverage": 4,
+        "not_found": 2
+      },
+      "failed_claim_reasons": {
+        "unknown_source_id": 172
+      },
+      "invented_nct_runs": 4,
+      "over_escalation_only": 0
+    },
+    "BASELINE": {
+      "config": "BASELINE",
+      "n_runs": 30,
+      "n_failed": 24,
+      "fail_rate": 0.8,
+      "failed_checks": {
+        "correct_product": 18,
+        "required_sections": 8,
+        "status": 4,
+        "covers_each_product": 2,
+        "review_flag": 2,
+        "max_claims": 2,
+        "required_sources": 2,
+        "summary_content": 1
+      },
+      "failed_by_category": {
+        "label": 12,
+        "comparison": 3,
+        "ambiguous_product": 2,
+        "refusal": 2,
+        "not_found": 2,
+        "coverage": 2,
+        "off_label": 1
+      },
+      "failed_claim_reasons": {
+        "quote_too_short": 2
+      },
+      "invented_nct_runs": 0,
+      "over_escalation_only": 0
+    },
+    "B_tools_only": {
+      "config": "B_tools_only",
+      "n_runs": 60,
+      "n_failed": 12,
+      "fail_rate": 0.2,
+      "failed_checks": {
+        "review_flag": 6,
+        "correct_product": 2,
+        "min_verified_claims": 2,
+        "min_trials": 2,
+        "status": 2
+      },
+      "failed_by_category": {
+        "label": 4,
+        "ambiguous_product": 2,
+        "trials": 2,
+        "off_label": 2,
+        "refusal": 2
+      },
+      "failed_claim_reasons": {
+        "quote_not_in_source": 26,
+        "unknown_source_id": 2
+      },
+      "invented_nct_runs": 0,
+      "over_escalation_only": 6
+    },
+    "C_tools_skills": {
+      "config": "C_tools_skills",
+      "n_runs": 90,
+      "n_failed": 6,
+      "fail_rate": 0.0667,
+      "failed_checks": {
+        "review_flag": 6
+      },
+      "failed_by_category": {
+        "label": 6
+      },
+      "failed_claim_reasons": {},
+      "invented_nct_runs": 0,
+      "over_escalation_only": 6
+    },
+    "D_tools_skills_sonnet": {
+      "config": "D_tools_skills_sonnet",
+      "n_runs": 30,
+      "n_failed": 1,
+      "fail_rate": 0.0333,
+      "failed_checks": {
+        "review_flag": 1
+      },
+      "failed_by_category": {
+        "label": 1
+      },
+      "failed_claim_reasons": {},
+      "invented_nct_runs": 0,
+      "over_escalation_only": 1
+    }
+  },
+  "efficiency": [
+    {
+      "config": "A_closed_book",
+      "n_runs": 60,
+      "pass_rate": 0.2333,
+      "latency_s_median": 10.33,
+      "cost_usd_mean": 0.0014,
+      "tool_calls_mean": 0.0,
+      "claim_precision_mean": 0.0,
+      "tokens_in_mean": 1657.7333,
+      "tokens_out_mean": 2151.15,
+      "n_passed": 14
+    },
+    {
+      "config": "BASELINE",
+      "n_runs": 30,
+      "pass_rate": 0.2,
+      "latency_s_median": 0.055,
+      "cost_usd_mean": 0.0,
+      "tool_calls_mean": null,
+      "claim_precision_mean": 0.9822,
+      "tokens_in_mean": null,
+      "tokens_out_mean": null,
+      "n_passed": 6
+    },
+    {
+      "config": "B_tools_only",
+      "n_runs": 60,
+      "pass_rate": 0.8,
+      "latency_s_median": 11.07,
+      "cost_usd_mean": 0.0025,
+      "tool_calls_mean": 3.8167,
+      "claim_precision_mean": 0.8861,
+      "tokens_in_mean": 17740.4167,
+      "tokens_out_mean": 2359.8,
+      "n_passed": 48
+    },
+    {
+      "config": "C_tools_skills",
+      "n_runs": 90,
+      "pass_rate": 0.9333,
+      "latency_s_median": 14.265,
+      "cost_usd_mean": 0.0033,
+      "tool_calls_mean": 2.5333,
+      "claim_precision_mean": 0.95,
+      "tokens_in_mean": 33265.1111,
+      "tokens_out_mean": 2505.5444,
+      "n_passed": 84
+    },
+    {
+      "config": "D_tools_skills_sonnet",
+      "n_runs": 30,
+      "pass_rate": 0.9667,
+      "latency_s_median": 16.225,
+      "cost_usd_mean": 0.0532,
+      "tool_calls_mean": 2.0667,
+      "claim_precision_mean": 0.9391,
+      "tokens_in_mean": 27597.4,
+      "tokens_out_mean": 1651.1333,
+      "n_passed": 29
+    }
+  ]
+}

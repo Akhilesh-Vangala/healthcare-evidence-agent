@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 280" role="img" aria-labelledby="title desc">
+  <title id="title">Healthcare Evidence Agent</title>
+  <desc id="desc">Governed AI agent with MCP tools, Agent Skills, and verbatim citation verification.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071018"/>
+      <stop offset="55%" stop-color="#0c1a24"/>
+      <stop offset="100%" stop-color="#0f2f2a"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#1a2a33" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="280" rx="12" fill="url(#bg)"/>
+  <rect width="1280" height="280" rx="12" fill="url(#grid)" opacity="0.55"/>
+  <rect x="0" y="0" width="6" height="280" fill="#3ECFBA"/>
+
+  <text x="48" y="42" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="12" fill="#7dd3c4" font-weight="600" letter-spacing="2">GOVERNED AGENTIC SYSTEM · FDA · TRIALS · MEDICARE</text>
+  <text x="48" y="118" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="54" fill="#E8EEF4" font-weight="700">Healthcare Evidence Agent</text>
+  <text x="48" y="162" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="22" fill="#c5d4de" font-weight="500">Cite only what you retrieved. Verify every quote.</text>
+  <text x="48" y="198" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="15" fill="#8aa0ae">Claude Code · 6-tool MCP · 4 Agent Skills · golden-set evals</text>
+
+  <g transform="translate(780,36)">
+    <rect width="170" height="88" rx="10" fill="#0b1620" stroke="#2a3f4c"/>
+    <text x="18" y="28" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="11" fill="#7dd3c4" letter-spacing="1.2">PASS RATE</text>
+    <text x="18" y="64" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="36" fill="#3ECFBA" font-weight="700">95%</text>
+    <text x="100" y="64" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="13" fill="#8aa0ae">CI 87100</text>
+  </g>
+  <g transform="translate(970,36)">
+    <rect width="170" height="88" rx="10" fill="#0b1620" stroke="#2a3f4c"/>
+    <text x="18" y="28" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="11" fill="#7dd3c4" letter-spacing="1.2">VS BASELINE</text>
+    <text x="18" y="64" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="36" fill="#E8EEF4" font-weight="700">20%</text>
+  </g>
+  <g transform="translate(780,144)">
+    <rect width="170" height="88" rx="10" fill="#0b1620" stroke="#2a3f4c"/>
+    <text x="18" y="28" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="11" fill="#7dd3c4" letter-spacing="1.2">CLAIMS VERIFIED</text>
+    <text x="18" y="64" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="36" fill="#E8EEF4" font-weight="700">94%</text>
+  </g>
+  <g transform="translate(970,144)">
+    <rect width="170" height="88" rx="10" fill="#0b1620" stroke="#2a3f4c"/>
+    <text x="18" y="28" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="11" fill="#7dd3c4" letter-spacing="1.2">INVENTED NCTs</text>
+    <text x="18" y="64" font-family="ui-sans-serif,Helvetica,Arial,sans-serif" font-size="36" fill="#3ECFBA" font-weight="700">0</text>
+  </g>
+</svg>

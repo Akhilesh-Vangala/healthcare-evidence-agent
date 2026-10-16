@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 420" role="img" aria-labelledby="title">
+  <title id="title">Healthcare Evidence Agent architecture</title>
+  <rect width="1100" height="420" rx="12" fill="#f7fafb"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4a6674"/>
+    </marker>
+  </defs>
+
+  <!-- Query -->
+  <rect x="30" y="170" width="120" height="70" rx="10" fill="#0f766e"/>
+  <text x="90" y="200" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#fff" font-weight="700">Question</text>
+  <text x="90" y="220" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#d1fae5">CMG / MedAffairs</text>
+
+  <!-- Claude -->
+  <rect x="200" y="145" width="200" height="120" rx="12" fill="#0b1620" stroke="#3ECFBA" stroke-width="2"/>
+  <text x="300" y="175" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#3ECFBA" font-weight="700">Claude Code</text>
+  <text x="300" y="198" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#c5d4de">headless agent runtime</text>
+  <text x="300" y="222" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#8aa0ae">+ 4 Agent Skills</text>
+  <text x="300" y="242" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#8aa0ae">structured JSON answer</text>
+
+  <!-- MCP -->
+  <rect x="460" y="40" width="240" height="340" rx="12" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="580" y="70" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#0f766e" font-weight="700">MCP server (6 tools)</text>
+  <rect x="480" y="90" width="200" height="36" rx="8" fill="#ecfeff"/>
+  <text x="580" y="113" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#0e7490">fda_search_labels</text>
+  <rect x="480" y="136" width="200" height="36" rx="8" fill="#ecfeff"/>
+  <text x="580" y="159" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#0e7490">fda_get_label_section</text>
+  <rect x="480" y="182" width="200" height="36" rx="8" fill="#eff6ff"/>
+  <text x="580" y="205" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1d4ed8">trials_search / trials_get</text>
+  <rect x="480" y="228" width="200" height="36" rx="8" fill="#f5f3ff"/>
+  <text x="580" y="251" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#6d28d9">cms_ncd_search / get</text>
+  <rect x="480" y="290" width="200" height="70" rx="8" fill="#0b1620"/>
+  <text x="580" y="320" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#3ECFBA" font-weight="700">evidence.jsonl</text>
+  <text x="580" y="340" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#8aa0ae">source_id + verbatim text</text>
+
+  <!-- Sources -->
+  <rect x="760" y="55" width="150" height="50" rx="8" fill="#ecfeff" stroke="#67e8f9"/>
+  <text x="835" y="85" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#0e7490" font-weight="600">openFDA</text>
+  <rect x="760" y="175" width="150" height="50" rx="8" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="835" y="205" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1d4ed8" font-weight="600">ClinicalTrials.gov</text>
+  <rect x="760" y="295" width="150" height="50" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="835" y="325" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#6d28d9" font-weight="600">CMS NCDs</text>
+
+  <!-- Verifier -->
+  <rect x="950" y="145" width="120" height="120" rx="12" fill="#0f766e"/>
+  <text x="1010" y="190" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#fff" font-weight="700">Verifier</text>
+  <text x="1010" y="212" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#d1fae5">verbatim quote</text>
+  <text x="1010" y="230" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#d1fae5">same-run source</text>
+  <text x="1010" y="248" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#d1fae5">no invented NCT</text>
+
+  <!-- arrows -->
+  <line x1="150" y1="205" x2="200" y2="205" stroke="#4a6674" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="400" y1="205" x2="460" y2="205" stroke="#4a6674" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="700" y1="108" x2="760" y2="80" stroke="#4a6674" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="200" x2="760" y2="200" stroke="#4a6674" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="310" x2="760" y2="320" stroke="#4a6674" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="325" x2="950" y2="205" stroke="#0f766e" stroke-width="2.5" marker-end="url(#arrow)"/>
+</svg>

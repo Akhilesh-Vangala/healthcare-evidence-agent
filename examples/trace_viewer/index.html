@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HEA trace — KEYTRUDA vs KEYTRUDA QLEX</title>
+  <style>
+    :root { --ink:#0b1620; --teal:#0f766e; --muted:#5b6b75; --bg:#f4f7f8; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--ink); }
+    header { background:linear-gradient(120deg,#071018,#0f2f2a); color:#e8eef4; padding:2rem 1.5rem; }
+    header h1 { margin:0 0 .4rem; font-size:1.6rem; }
+    header p { margin:0; opacity:.85; max-width:52rem; }
+    main { max-width:960px; margin:0 auto; padding:1.5rem; }
+    .stats { display:flex; gap:1rem; flex-wrap:wrap; margin:1rem 0 1.5rem; }
+    .stat { background:#fff; border:1px solid #dbe4ea; border-radius:12px; padding:1rem 1.2rem; min-width:140px; }
+    .stat b { display:block; font-size:1.4rem; color:var(--teal); }
+    .card { background:#fff; border:1px solid #dbe4ea; border-radius:12px; padding:1rem 1.1rem; margin:0 0 1rem; }
+    .badge { color:#fff; font-size:.7rem; font-weight:700; letter-spacing:.06em; padding:.25rem .5rem; border-radius:999px; }
+    .row { display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; margin-bottom:.6rem; }
+    blockquote { margin:.6rem 0; padding:.75rem 1rem; background:#ecfeff; border-left:3px solid var(--teal); font-size:.92rem; }
+    .stmt { font-weight:600; margin:.2rem 0; }
+    .meta { color:var(--muted); font-size:.85rem; margin:0; }
+    code { font-size:.8rem; background:#eef3f6; padding:.1rem .35rem; border-radius:4px; }
+    ul { line-height:1.6; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Provenance trace · KEYTRUDA vs KEYTRUDA QLEX</h1>
+    <p>What melanoma indications are on the Keytruda label?</p>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="stat"><b>3</b>verified claims</div>
+      <div class="stat"><b>0</b>unverified</div>
+      <div class="stat"><b>1</b>sources retrieved</div>
+      <div class="stat"><b>C_tools_skills</b>config</div>
+    </div>
+    <h2>Answer summary</h2>
+    <p>The KEYTRUDA (pembrolizumab, intravenous) label lists two melanoma indications: treatment of unresectable or metastatic melanoma, and adjuvant treatment of Stage IIB, IIC, or III melanoma following complete resection in adults and pediatric patients 12 years and older. I answered from the KEYTRUDA label only. A separate KEYTRUDA QLEX (subcutaneous) label also appeared in the search and was not used for this answer.</p>
+    <h2>Claims</h2>
+    
+            <article class="card">
+              <div class="row"><span class="badge" style="background:#0f766e">VERIFIED</span>
+              <code>fda:9333c79b-d487-4538-a9f0-71b91a02b287:indications_and_usage</code></div>
+              <p class="stmt">The KEYTRUDA label lists treatment of unresectable or metastatic melanoma as an indication.</p>
+              <blockquote>Melanoma for the treatment of patients with unresectable or metastatic melanoma. ( 1.1 )</blockquote>
+              <p class="meta">fda_label
+ · KEYTRUDA
+ · indications_and_usage</p>
+            </article>
+            
+            <article class="card">
+              <div class="row"><span class="badge" style="background:#0f766e">VERIFIED</span>
+              <code>fda:9333c79b-d487-4538-a9f0-71b91a02b287:indications_and_usage</code></div>
+              <p class="stmt">The KEYTRUDA label lists adjuvant treatment of Stage IIB, IIC, or III melanoma following complete resection as an indication, for adults and pediatric patients aged 12 years and older.</p>
+              <blockquote>for the adjuvant treatment of adult and pediatric (12 years and older) patients with Stage IIB, IIC, or III melanoma following complete resection. ( 1.1 )</blockquote>
+              <p class="meta">fda_label
+ · KEYTRUDA
+ · indications_and_usage</p>
+            </article>
+            
+            <article class="card">
+              <div class="row"><span class="badge" style="background:#0f766e">VERIFIED</span>
+              <code>fda:9333c79b-d487-4538-a9f0-71b91a02b287:indications_and_usage</code></div>
+              <p class="stmt">KEYTRUDA is described on its label as a programmed death receptor-1 (PD-1)-blocking antibody.</p>
+              <blockquote>KEYTRUDA is a programmed death receptor-1 (PD-1)-blocking antibody indicated:</blockquote>
+              <p class="meta">fda_label
+ · KEYTRUDA
+ · indications_and_usage</p>
+            </article>
+            
+    <h2>Evidence log</h2>
+    <ul><li><code>fda:9333c79b-d487-4538-a9f0-71b91a02b287:indications_and_usage</code> — fda_label (24463 chars)</li></ul>
+    <p class="meta">Generated from <code>examples/agent_runs/A01_keytruda_vs_keytruda_qlex</code> via <code>scripts/build_trace_viewer.py</code>. No model call.</p>
+  </main>
+</body>
+</html>

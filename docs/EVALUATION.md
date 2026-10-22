@@ -16,7 +16,7 @@ Grading is fully programmatic (`src/cmg_agent/verify.py`). No LLM-as-judge.
 | `C_tools_skills` | Claude Haiku | yes | yes |
 | `D_tools_skills_sonnet` | Claude Sonnet | yes | yes |
 
-Primary ablation (A/B/C × 30 tasks × 2 repeats) = **180 runs**. Adding baseline (30) and Sonnet (30) = **240 runs** total in the published reports under `reports/`.
+Primary ablation (A/B/C × 30 tasks × 2 repeats) = **180 runs**. Adding baseline (30) and Sonnet (30) = **240 runs**. Membership is [`reports/canonical.json`](../reports/canonical.json). `scripts/build_eval_report.py` reads that list and nothing else.
 
 ## Headline results
 
@@ -33,9 +33,9 @@ Primary ablation (A/B/C × 30 tasks × 2 repeats) = **180 runs**. Adding baselin
 ## What moved the needle
 
 - **Tools (+57 pts vs A):** without retrieval, 0% of claims verified; 4 runs invented NCT IDs. With tools: zero invented NCTs across B/C/D.
-- **Skills (+15 pts vs B):** restored refusals (50%→100%), off-label escalation (0%→100%), ambiguous products (67%→100%), and cut MCP calls/task 3.8→2.6.
-- **Sonnet (+2 pts vs C at ~16× cost):** not worth it as the default for this workload.
-- **Remaining C failures:** over-escalation of the review flag only — not wrong product, not unverifiable claim pass, not missed refusal.
+- **Skills (+15 pts vs B, paired CI +2 to +30):** restored refusals (50%→100%), off-label escalation (0%→100%), ambiguous products (67%→100%), and cut MCP calls/task from 3.8 to 2.7.
+- **Sonnet (+1.7 pts vs C, CI includes 0, ~16× cost):** not the default. The 97% vs 95% headline is the same comparison rounded.
+- **Remaining C failures:** 3 of 60 runs, all over-escalation of the review flag — not wrong product, not an unverifiable claim, not a missed refusal.
 
 ## Reproducing
 
@@ -47,7 +47,14 @@ hea-eval --configs BASELINE D_tools_skills_sonnet --workers 4
 python scripts/summarize_reports.py
 ```
 
-Paired bootstrap CIs are computed over per-task pass means (`eval_agent.bootstrap_ci`). Broader analysis lives in [agent-config-bench](https://github.com/Akhilesh-Vangala/agent-config-bench).
+Paired bootstrap CIs are computed over per-task pass means. Regenerate with `python scripts/build_eval_report.py` (canonical files only). Output: `reports/analysis/`.
+
+## What is not a result
+
+- `reports/exploratory/eval-C_tools_skills-pilot-20260930-114930.json` — single pass of C, 90%, 30 runs. Kept so the file is not deleted, excluded so it cannot be averaged with the 60-run C block (that average is 93.3% and matches neither run).
+- `evals/adversarial/redteam_tasks.json` — six prompts. Not run. No pass rate.
+
+Broader cross-project notes live in [agent-config-bench](https://github.com/Akhilesh-Vangala/agent-config-bench).
 
 ## Caveats
 

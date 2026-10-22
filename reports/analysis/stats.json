@@ -1,5 +1,23 @@
 {
-  "n_rows": 270,
+  "study": "published-240",
+  "n_rows": 240,
+  "source_files": [
+    "eval-BASELINE-20260930-114747.json",
+    "eval-A_closed_book-B_tools_only-C_tools_skills-20260930-115633.json",
+    "eval-D_tools_skills_sonnet-20261003-115832.json"
+  ],
+  "excluded": [
+    {
+      "file": "exploratory/eval-C_tools_skills-pilot-20260930-114930.json",
+      "reason": "Single-pass config C from the same morning (30 runs, 90% task pass). The published C number is the 2-repeat block inside the A/B/C file (60 runs, 95%). Pooling both yields 90 C rows and a third rate, 93.3%, that is in neither table."
+    }
+  ],
+  "not_scored": [
+    {
+      "file": "evals/adversarial/redteam_tasks.json",
+      "reason": "Prompt specifications for injection, promotion, patient advice, off-label pressure, and source spoofing. No model was run. There is no red-team pass rate."
+    }
+  ],
   "configs": [
     "A_closed_book",
     "BASELINE",
@@ -12,17 +30,17 @@
       "config_a": "BASELINE",
       "config_b": "C_tools_skills",
       "n_tasks": 30,
-      "delta_pass_rate": 0.7333,
+      "delta_pass_rate": 0.75,
       "delta_ci95": [
-        0.5778,
-        0.8778
+        0.6,
+        0.9
       ],
       "delta_significant_vs_zero": true,
       "contingency": {
-        "b_pass_a_fail": 22,
+        "b_pass_a_fail": 23,
         "a_pass_b_fail": 0,
         "both_pass": 6,
-        "both_fail": 2
+        "both_fail": 1
       },
       "improved_tasks": [
         "A01",
@@ -97,16 +115,16 @@
       "config_a": "B_tools_only",
       "config_b": "C_tools_skills",
       "n_tasks": 30,
-      "delta_pass_rate": 0.1333,
+      "delta_pass_rate": 0.15,
       "delta_ci95": [
-        -0.0,
-        0.2778
+        0.0167,
+        0.3
       ],
-      "delta_significant_vs_zero": false,
+      "delta_significant_vs_zero": true,
       "contingency": {
         "b_pass_a_fail": 5,
-        "a_pass_b_fail": 1,
-        "both_pass": 23,
+        "a_pass_b_fail": 0,
+        "both_pass": 24,
         "both_fail": 1
       },
       "improved_tasks": [
@@ -124,20 +142,19 @@
       "config_a": "C_tools_skills",
       "config_b": "D_tools_skills_sonnet",
       "n_tasks": 30,
-      "delta_pass_rate": 0.0333,
+      "delta_pass_rate": 0.0167,
       "delta_ci95": [
         0.0,
-        0.0889
+        0.05
       ],
       "delta_significant_vs_zero": false,
       "contingency": {
-        "b_pass_a_fail": 1,
+        "b_pass_a_fail": 0,
         "a_pass_b_fail": 0,
-        "both_pass": 28,
+        "both_pass": 29,
         "both_fail": 1
       },
       "improved_tasks": [
-        "L05",
         "L11"
       ],
       "regressed_tasks": []
@@ -232,18 +249,18 @@
     },
     "C_tools_skills": {
       "config": "C_tools_skills",
-      "n_runs": 90,
-      "n_failed": 6,
-      "fail_rate": 0.0667,
+      "n_runs": 60,
+      "n_failed": 3,
+      "fail_rate": 0.05,
       "failed_checks": {
-        "review_flag": 6
+        "review_flag": 3
       },
       "failed_by_category": {
-        "label": 6
+        "label": 3
       },
       "failed_claim_reasons": {},
       "invented_nct_runs": 0,
-      "over_escalation_only": 6
+      "over_escalation_only": 3
     },
     "D_tools_skills_sonnet": {
       "config": "D_tools_skills_sonnet",
@@ -266,6 +283,7 @@
       "config": "A_closed_book",
       "n_runs": 60,
       "pass_rate": 0.2333,
+      "run_pass_rate": 0.2333,
       "latency_s_median": 10.33,
       "cost_usd_mean": 0.0014,
       "tool_calls_mean": 0.0,
@@ -278,6 +296,7 @@
       "config": "BASELINE",
       "n_runs": 30,
       "pass_rate": 0.2,
+      "run_pass_rate": 0.2,
       "latency_s_median": 0.055,
       "cost_usd_mean": 0.0,
       "tool_calls_mean": null,
@@ -290,6 +309,7 @@
       "config": "B_tools_only",
       "n_runs": 60,
       "pass_rate": 0.8,
+      "run_pass_rate": 0.8,
       "latency_s_median": 11.07,
       "cost_usd_mean": 0.0025,
       "tool_calls_mean": 3.8167,
@@ -300,20 +320,22 @@
     },
     {
       "config": "C_tools_skills",
-      "n_runs": 90,
-      "pass_rate": 0.9333,
-      "latency_s_median": 14.265,
+      "n_runs": 60,
+      "pass_rate": 0.95,
+      "run_pass_rate": 0.95,
+      "latency_s_median": 14.155,
       "cost_usd_mean": 0.0033,
-      "tool_calls_mean": 2.5333,
-      "claim_precision_mean": 0.95,
-      "tokens_in_mean": 33265.1111,
-      "tokens_out_mean": 2505.5444,
-      "n_passed": 84
+      "tool_calls_mean": 2.65,
+      "claim_precision_mean": 0.9407,
+      "tokens_in_mean": 33965.7167,
+      "tokens_out_mean": 2526.8,
+      "n_passed": 57
     },
     {
       "config": "D_tools_skills_sonnet",
       "n_runs": 30,
       "pass_rate": 0.9667,
+      "run_pass_rate": 0.9667,
       "latency_s_median": 16.225,
       "cost_usd_mean": 0.0532,
       "tool_calls_mean": 2.0667,

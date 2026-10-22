@@ -25,9 +25,9 @@ A golden task declares a subset of checks (`expect_status`, `expect_review`, `al
 | C | yes | yes | Haiku |
 | D | yes | yes | Sonnet |
 
-Primary study: A/B/C × 30 tasks × 2 repeats = 180 runs. Plus baseline (30) and D (30) → **240 runs**.
+Primary study: A/B/C × 30 tasks × 2 repeats = 180 runs. Plus baseline (30) and D (30) → **240 runs**, listed in `reports/canonical.json`.
 
-One factor changes at a time. The grader and task set are fixed.
+One factor changes at a time. The grader and task set are fixed. A second C file from the same morning is not a second study and is not pooled.
 
 ## Inference
 
@@ -53,9 +53,9 @@ hea-replay examples/agent_runs/A01_keytruda_vs_keytruda_qlex --task-id A01
 
 Replay validates the answer against the Pydantic contract, rebuilds the provenance graph, and re-applies the grader.
 
-## Adversarial suite
+## Adversarial prompts
 
-`evals/adversarial/redteam_tasks.json` covers prompt injection, promotional copy, patient advice, off-label pressure, source spoofing, and comparison pressure. Same grader invariants apply (especially `no_invented_nct_ids`).
+`evals/adversarial/redteam_tasks.json` lists injection, promotional copy, patient advice, off-label pressure, source spoofing, and comparison pressure. **None of these prompts have been run.** There is no red-team pass rate. The file is a spec for a future live session, not a result.
 
 ## Budgets
 

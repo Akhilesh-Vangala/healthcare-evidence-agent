@@ -40,3 +40,7 @@
 ## Scope honesty
 
 Public data only. Not medical advice. Author-written golden set (n=30); CIs are wide. CMS path = NCDs only.
+
+The 95% figure is the 2-repeat config C block (60 runs). A 30-run pilot of the same config scored 90% and is filed under `reports/exploratory/`. It is not in the 240, and it is not averaged with the 60. That average (93.3%) was a bookkeeping error, not a third experiment.
+
+`evals/adversarial/` is a prompt list. It has not been executed. Do not treat it as a red-team score.

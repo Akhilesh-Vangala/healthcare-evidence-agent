@@ -1,4 +1,4 @@
-.PHONY: install test lint eval-smoke ci
+.PHONY: install test lint eval-smoke analysis trace demo ci mcp
 
 install:
 	python3 -m venv .venv
@@ -13,6 +13,15 @@ lint:
 
 eval-smoke:
 	.venv/bin/hea-eval --configs BASELINE --only L01 N01 R02
+
+analysis:
+	.venv/bin/python scripts/build_eval_report.py
+
+trace:
+	.venv/bin/python scripts/build_trace_viewer.py
+
+demo:
+	.venv/bin/hea-demo
 
 ci: lint test
 

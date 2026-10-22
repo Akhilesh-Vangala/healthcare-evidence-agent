@@ -113,10 +113,12 @@ def summarize_efficiency(rows: list[dict[str, Any]], config: str) -> dict[str, A
         return round(statistics.fmean(vals), 4) if vals else None
 
     passed = [r for r in subset if r.get("passed")]
+    task_means = list(_task_pass_map(subset, config).values())
     return {
         "config": config,
         "n_runs": len(subset),
-        "pass_rate": round(len(passed) / len(subset), 4),
+        "pass_rate": round(statistics.fmean(task_means), 4) if task_means else None,
+        "run_pass_rate": round(len(passed) / len(subset), 4),
         "latency_s_median": _med("latency_s"),
         "cost_usd_mean": _mean("cost_usd_list_price"),
         "tool_calls_mean": _mean("tool_calls"),

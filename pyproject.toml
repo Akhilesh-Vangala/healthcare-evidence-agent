@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "healthcare-evidence-agent"
-version = "0.2.0"
+version = "0.3.1"
 description = "Governed healthcare evidence agent: Claude Code runtime, 6-tool MCP server, 4 Agent Skills, and programmatic citation verification over FDA labels, ClinicalTrials.gov, and Medicare NCDs."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -31,6 +31,8 @@ claude = ["anthropic>=0.40.0"]
 hea = "cmg_agent.cli:main"
 hea-eval = "cmg_agent.eval_agent:main"
 hea-mcp = "cmg_agent.mcp_server:main"
+hea-replay = "cmg_agent.replay:main"
+hea-demo = "cmg_agent.demo:main"
 cmg-agent = "cmg_agent.cli:main"
 cmg-eval-agent = "cmg_agent.eval_agent:main"
 cmg-mcp = "cmg_agent.mcp_server:main"

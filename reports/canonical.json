@@ -1,0 +1,21 @@
+{
+  "study": "published-240",
+  "expected_rows": 240,
+  "files": [
+    "eval-BASELINE-20260930-114747.json",
+    "eval-A_closed_book-B_tools_only-C_tools_skills-20260930-115633.json",
+    "eval-D_tools_skills_sonnet-20261003-115832.json"
+  ],
+  "excluded": [
+    {
+      "file": "exploratory/eval-C_tools_skills-pilot-20260930-114930.json",
+      "reason": "Single-pass config C from the same morning (30 runs, 90% task pass). The published C number is the 2-repeat block inside the A/B/C file (60 runs, 95%). Pooling both yields 90 C rows and a third rate, 93.3%, that is in neither table."
+    }
+  ],
+  "not_scored": [
+    {
+      "file": "evals/adversarial/redteam_tasks.json",
+      "reason": "Prompt specifications for injection, promotion, patient advice, off-label pressure, and source spoofing. No model was run. There is no red-team pass rate."
+    }
+  ]
+}

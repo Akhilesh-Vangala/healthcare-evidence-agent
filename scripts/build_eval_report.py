@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from cmg_agent.analysis.paired import paired_delta, summarize_efficiency, summarize_failures  # noqa: E402
+from cmg_agent.analysis.study import load_canonical_rows, load_manifest  # noqa: E402
 
 REPORTS = ROOT / "reports"
 OUT = REPORTS / "analysis"
@@ -23,14 +24,7 @@ PAIRS = [
 
 
 def _load_rows() -> list[dict]:
-    rows: list[dict] = []
-    for path in sorted(REPORTS.glob("eval-*.json")):
-        data = json.loads(path.read_text())
-        for r in data.get("rows") or []:
-            r = dict(r)
-            r["_report"] = path.name
-            rows.append(r)
-    return rows
+    return load_canonical_rows()
 
 
 def _plot_pareto(eff: list[dict], dest: Path) -> None:
@@ -98,8 +92,13 @@ def main() -> int:
     failures = {c: summarize_failures(rows, c) for c in configs}
     efficiency = [summarize_efficiency(rows, c) for c in configs]
 
+    spec = load_manifest()
     payload = {
+        "study": spec["study"],
         "n_rows": len(rows),
+        "source_files": spec["files"],
+        "excluded": spec.get("excluded", []),
+        "not_scored": spec.get("not_scored", []),
         "configs": configs,
         "paired_deltas": deltas,
         "failures": failures,
@@ -107,7 +106,15 @@ def main() -> int:
     }
     (OUT / "stats.json").write_text(json.dumps(payload, indent=2))
 
-    md = ["# Eval analysis\n", f"Rows analyzed: **{len(rows)}** across `{', '.join(configs)}`.\n", "## Paired deltas\n"]
+    md = [
+        "# Eval analysis\n",
+        f"Study `{spec['study']}`: **{len(rows)}** rows from {len(spec['files'])} files. "
+        "The same-morning single-pass of C is not included.\n",
+        "Source files:\n",
+    ]
+    for name in spec["files"]:
+        md.append(f"- `{name}`")
+    md.append("\n## Paired deltas\n")
     md.append("| Contrast | Δ pass | 95% CI | sig≠0 | B∨¬A | A∨¬B |")
     md.append("|---|---:|---|:---:|---:|---:|")
     for d in deltas:
@@ -119,7 +126,7 @@ def main() -> int:
             f"{c.get('b_pass_a_fail', 0)} | {c.get('a_pass_b_fail', 0)} |"
         )
     md.append("\n## Efficiency\n")
-    md.append("| Config | Pass | Cost/task | Latency med | Tools/task | Claim prec |")
+    md.append("| Config | Task pass | Cost/task | Latency med | Tools/task | Claim prec |")
     md.append("|---|---:|---:|---:|---:|---:|")
     for e in efficiency:
         md.append(
@@ -127,6 +134,15 @@ def main() -> int:
             f"${(e.get('cost_usd_mean') or 0):.4f} | {e.get('latency_s_median')} | "
             f"{e.get('tool_calls_mean')} | {(e.get('claim_precision_mean') or 0):.1%} |"
         )
+    md.append(
+        "\nTask pass is the mean of per-task means (repeats averaged first). "
+        "It is the same definition as the README table.\n"
+    )
+    md.append("\n## Not scored\n")
+    md.append(
+        "`evals/adversarial/redteam_tasks.json` is a prompt spec. "
+        "No configuration was run on it, so it has no pass rate.\n"
+    )
     md.append("\n## Failure taxonomy (C_tools_skills)\n")
     fc = failures.get("C_tools_skills") or {}
     md.append(

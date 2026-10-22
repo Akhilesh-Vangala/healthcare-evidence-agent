@@ -43,12 +43,14 @@ A governed AI agent for biotech commercial / medical / government-affairs questi
 
 | Contrast | Δ pass (95% CI) | Significance |
 |---|---|---|
-| Baseline → C | **+73 pts** [+58, +88] | yes |
+| Baseline → C | **+75 pts** [+60, +90] | yes |
 | A → B (add tools) | **+57 pts** [+33, +77] | yes |
-| B → C (add skills) | +13 pts [0, +28] | restores refusals / off-label / ambiguous products |
-| C → Sonnet | +3 pts [0, +9] | ~16× cost — not the default |
+| B → C (add skills) | **+15 pts** [+2, +30] | yes |
+| C → Sonnet | +1.7 pts [0, +5] | no — ~16× cost |
 
-With tools: **zero invented NCT IDs**. Remaining C failures are **over-escalation of human review only** — not wrong product, not unverifiable claims passing, not missed refusals. Full paired stats: [`reports/analysis/REPORT.md`](reports/analysis/REPORT.md).
+With tools: **zero invented NCT IDs**. On C, the 3 failed runs out of 60 are **over-escalation of human review only**. Full paired stats: [`reports/analysis/REPORT.md`](reports/analysis/REPORT.md).
+
+The 240 rows are the files named in [`reports/canonical.json`](reports/canonical.json). A same-morning single pass of C (30 runs, 90%) is kept in [`reports/exploratory/`](reports/exploratory/) and is not averaged in. Averaging it with the 60-run C block is what previously printed 93.3%.
 
 ## Architecture
 
@@ -75,7 +77,7 @@ flowchart LR
 | MCP (6) | `fda_search_*`, `trials_*`, `cms_ncd_*` — every citeable doc logged |
 | Skills (4) | Label disambiguation, citation discipline, trial landscape, escalation/refusal |
 | Verifier | Same-run `source_id` + verbatim quote + no invented NCT |
-| Eval | 30 golden tasks · paired bootstrap · adversarial suite · replay |
+| Eval | 30 golden tasks · paired bootstrap on the 240-row study · replay |
 
 ## 60-second offline demo (no API key)
 
@@ -113,7 +115,7 @@ src/cmg_agent/
   replay.py / demo.py offline re-grade & recruiter demo
   analysis/           paired bootstrap · failure taxonomy
 evals/golden/         30 golden tasks
-evals/adversarial/    red-team / injection suite
+evals/adversarial/    prompt spec only — not scored
 examples/             agent runs + HTML trace viewer
 reports/              raw ablations + analysis/
 ```
@@ -125,6 +127,8 @@ reports/              raw ablations + analysis/
 - Grader checks product, citations, status, review flags — not summary prose quality.
 - CMS path covers public NCDs only.
 - HTTP responses cached ~7 days under `.cache/` for reproducible reruns.
+- `evals/adversarial/redteam_tasks.json` is a prompt list. It has not been run, and there is no red-team pass rate.
+- `reports/exploratory/` holds a 30-run pilot of C (90%). It is not part of the 240.
 
 ## License
 

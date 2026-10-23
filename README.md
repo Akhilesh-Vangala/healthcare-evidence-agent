@@ -18,7 +18,9 @@ A governed AI agent for biotech commercial / medical / government-affairs questi
 
 > Public data only. Not medical advice. No PHI.
 
-[**For reviewers ↗**](docs/FOR_REVIEWERS.md) · [Trace viewer](examples/trace_viewer/index.html) · [Analysis report](reports/analysis/REPORT.md) · [Methodology](docs/METHODOLOGY.md) · [Architecture](docs/ARCHITECTURE.md)
+[**Open the console ↗**](https://healthcare-evidence.vercel.app) · [For reviewers](docs/FOR_REVIEWERS.md) · [Analysis report](reports/analysis/REPORT.md) · [Methodology](docs/METHODOLOGY.md) · [Architecture](docs/ARCHITECTURE.md)
+
+The console replays the published study, five saved runs, and the citation check. It does not call a model. A new question still runs through Claude Code locally (`hea-eval`).
 
 ## Proof (240 runs)
 

@@ -24,7 +24,7 @@
 
 ## 5-minute review path
 
-1. **README** — banner metrics, results table, architecture diagram  
+1. **[Operator console](https://healthcare-evidence.vercel.app)** — study table, five saved runs, citation check. No API key, no model call.  
 2. **[`reports/analysis/REPORT.md`](../reports/analysis/REPORT.md)** — paired Δ, cost–quality, failure taxonomy  
 3. **[`examples/trace_viewer/index.html`](../examples/trace_viewer/index.html)** — open locally; see claims mapped to sources  
 4. **`make test`** — offline verifier, provenance, analysis (no API key)  

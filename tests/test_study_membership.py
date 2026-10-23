@@ -45,6 +45,16 @@ def test_checked_in_analysis_uses_only_the_canonical_study():
     assert all("pilot" not in name and "114930" not in name for name in stats["source_files"])
 
 
+def test_console_bundle_matches_the_published_study():
+    bundle = json.loads((ROOT / "console/src/generated/study.json").read_text())
+    assert bundle["n_rows"] == 240
+    assert bundle["study"] == "published-240"
+    assert len(bundle["tasks"]) == 30
+    assert len(bundle["traces"]) == 5
+    assert bundle["configs"][3]["id"] == "C_tools_skills"
+    assert bundle["configs"][3]["pass_rate"] == 0.95
+
+
 def test_redteam_file_is_marked_unscored():
     spec = load_manifest()
     assert any("redteam" in item["file"] for item in spec["not_scored"])

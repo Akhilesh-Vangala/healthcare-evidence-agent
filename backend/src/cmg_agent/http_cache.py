@@ -10,7 +10,7 @@ from typing import Any
 
 import httpx
 
-DEFAULT_CACHE = Path(__file__).resolve().parents[2] / ".cache" / "http"
+DEFAULT_CACHE = Path(__file__).resolve().parents[3] / ".cache" / "http"
 USER_AGENT = "cmg-deep-claude-agent/0.1 (+https://github.com/Akhilesh-Vangala/cmg-deep-claude-agent; research prototype)"
 
 

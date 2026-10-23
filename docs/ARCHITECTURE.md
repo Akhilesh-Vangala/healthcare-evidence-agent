@@ -47,7 +47,7 @@ HTTP responses are disk-cached (~7 days) under `.cache/` for reproducible eval r
 
 ## Agent Skills (4)
 
-Loaded from `agent_workspace/.claude/skills/` when the Claude Code workspace includes them:
+Loaded from `agent/workspace/.claude/skills/` when the Claude Code workspace includes them:
 
 | Skill | Job |
 | --- | --- |
@@ -56,7 +56,7 @@ Loaded from `agent_workspace/.claude/skills/` when the Claude Code workspace inc
 | `trial-landscape` | Trial search procedure; existence ≠ efficacy |
 | `review-escalation` | When to escalate vs refuse |
 
-The older copies under `src/cmg_agent/skills/*/SKILL.md` feed the baseline FastAPI skill catalog only. Claude Code uses the workspace skills.
+The older copies under `backend/src/cmg_agent/skills/*/SKILL.md` feed the baseline FastAPI skill catalog only. Claude Code uses the workspace skills.
 
 ## Verifier contract
 

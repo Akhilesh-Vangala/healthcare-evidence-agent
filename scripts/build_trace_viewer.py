@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 from cmg_agent.evidence import load  # noqa: E402
 from cmg_agent.provenance import build_provenance  # noqa: E402

@@ -46,7 +46,7 @@ def test_checked_in_analysis_uses_only_the_canonical_study():
 
 
 def test_console_bundle_matches_the_published_study():
-    bundle = json.loads((ROOT / "console/src/generated/study.json").read_text())
+    bundle = json.loads((ROOT / "frontend/src/generated/study.json").read_text())
     assert bundle["n_rows"] == 240
     assert bundle["study"] == "published-240"
     assert len(bundle["tasks"]) == 30

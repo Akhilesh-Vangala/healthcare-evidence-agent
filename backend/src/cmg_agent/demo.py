@@ -14,7 +14,7 @@ from cmg_agent.evidence import load
 from cmg_agent.provenance import build_provenance
 from cmg_agent.verify import grade, verify_claims
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_RUN = ROOT / "examples/agent_runs/A01_keytruda_vs_keytruda_qlex"
 TASKS = ROOT / "evals/golden/agent_tasks.json"
 

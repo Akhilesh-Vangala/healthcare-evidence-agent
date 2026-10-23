@@ -11,13 +11,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 from cmg_agent.analysis.study import load_manifest, published_summaries  # noqa: E402
 from cmg_agent.evidence import load  # noqa: E402
 from cmg_agent.verify import verify_claims  # noqa: E402
 
-OUT = ROOT / "console" / "src" / "generated" / "study.json"
+OUT = ROOT / "frontend" / "src" / "generated" / "study.json"
 
 TRACES = [
     ("A01_keytruda_vs_keytruda_qlex", "A01", "Two products share a name"),

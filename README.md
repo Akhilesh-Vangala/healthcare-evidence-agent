@@ -91,20 +91,18 @@ make analysis                     # regenerate paired deltas + figures
 ## Repository layout
 
 ```text
-docs/assets/          architecture diagram
-agent_workspace/      Claude Code Agent Skills
-src/cmg_agent/
-  mcp_server.py       6-tool MCP server
-  sources.py          openFDA · CT.gov · CMS
-  claude_runner.py    headless Claude Code runner
-  verify.py           citation verifier + task grader
-  provenance.py       claim → source audit graph
-  replay.py / demo.py offline re-grade & recruiter demo
-  analysis/           paired bootstrap · failure taxonomy
-evals/golden/         30 golden tasks
-evals/adversarial/    prompt spec only — not scored
-examples/             agent runs + HTML trace viewer
-reports/              raw ablations + analysis/
+frontend/                 operator console (study, traces, citation check)
+agent/
+  workspace/              Claude Code skills used by the measured runs
+  workspace_noskills/     same workspace with skills removed (config B)
+backend/src/cmg_agent/
+  claude_runner.py        headless agent runtime
+  mcp_server.py           6-tool MCP server
+  sources.py              openFDA, ClinicalTrials.gov, CMS
+  verify.py               citation check and task grade
+  analysis/               paired bootstrap and failure counts
+evals/golden/             30 tasks
+reports/                  published runs and figures
 ```
 
 ## Limitations

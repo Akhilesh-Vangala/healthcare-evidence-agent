@@ -43,11 +43,11 @@ Repository = "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent"
 Issues = "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/issues"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["backend/src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["backend/src"]
 
 [tool.ruff]
 line-length = 110

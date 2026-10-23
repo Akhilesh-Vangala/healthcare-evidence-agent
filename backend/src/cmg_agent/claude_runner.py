@@ -19,9 +19,9 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[2]
-WORKSPACE_SKILLS = ROOT / "agent_workspace"
-WORKSPACE_PLAIN = ROOT / "agent_workspace_noskills"
+ROOT = Path(__file__).resolve().parents[3]
+WORKSPACE_SKILLS = ROOT / "agent" / "workspace"
+WORKSPACE_PLAIN = ROOT / "agent" / "workspace_noskills"
 
 SYSTEM_PROMPT = """You are a healthcare evidence agent supporting Commercial, Medical, and Government Affairs teams at a biotech company.
 Answer only from evidence returned by your tools in this session, never from memory. Use the tools before answering.
@@ -118,7 +118,7 @@ def run(query: str, cfg: AgentConfig, runs_dir: Path | str = ROOT / "runs") -> R
         mcp_cfg = {"mcpServers": {"cmg": {
             "command": sys.executable,
             "args": ["-m", "cmg_agent.mcp_server"],
-            "env": {"CMG_EVIDENCE_PATH": str(evidence_path), "PYTHONPATH": str(ROOT / "src")},
+            "env": {"CMG_EVIDENCE_PATH": str(evidence_path), "PYTHONPATH": str(ROOT / "backend" / "src")},
         }}}
         (run_dir / "mcp.json").write_text(json.dumps(mcp_cfg, indent=2))
         cmd += ["--mcp-config", str(run_dir / "mcp.json")]

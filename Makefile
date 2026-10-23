@@ -9,7 +9,7 @@ test:
 	.venv/bin/pytest -q
 
 lint:
-	.venv/bin/ruff check src tests
+	.venv/bin/ruff check backend/src tests
 
 eval-smoke:
 	.venv/bin/hea-eval --configs BASELINE --only L01 N01 R02

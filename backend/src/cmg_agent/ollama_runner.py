@@ -40,7 +40,7 @@ TOOL_SPECS = [
 
 def _skills_text() -> str:
     parts = []
-    for p in sorted((ROOT / "agent_workspace/.claude/skills").glob("*/SKILL.md")):
+    for p in sorted((ROOT / "agent" / "workspace" / ".claude" / "skills").glob("*/SKILL.md")):
         parts.append(re.sub(r"^---.*?---\s*", "", p.read_text(), flags=re.S))
     return "\n\n".join(parts)
 

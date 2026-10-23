@@ -10,13 +10,12 @@ make lint
 ## Layout
 
 ```text
-src/cmg_agent/          library (historical package name; product = Healthcare Evidence Agent)
-agent_workspace/        Claude Code skills workspace
+frontend/               operator console
+agent/workspace/        Claude Code skills
+backend/src/cmg_agent/  runtime, tools, verifier, analysis
 evals/golden/           30 golden tasks
 reports/                raw ablation JSON
 examples/agent_runs/    checked-in traces
-scripts/                report helpers / plots
-docs/                   architecture, eval, responsible AI
 ```
 
 ## MCP from Claude Code

@@ -15,7 +15,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-DEFAULT_PATH = Path(__file__).resolve().parents[2] / ".cache" / "evidence_default.jsonl"
+DEFAULT_PATH = Path(__file__).resolve().parents[3] / ".cache" / "evidence_default.jsonl"
 
 
 def _path() -> Path:

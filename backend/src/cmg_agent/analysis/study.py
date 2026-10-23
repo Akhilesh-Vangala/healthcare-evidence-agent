@@ -17,7 +17,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 REPORTS = ROOT / "reports"
 MANIFEST = REPORTS / "canonical.json"
 

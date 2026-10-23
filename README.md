@@ -1,7 +1,3 @@
-<p align="center"><img src="docs/assets/branding/hea-banner.svg" alt="Healthcare Evidence Agent" width="100%"></p>
-
-**Cite only what you retrieved. Verify every quote.**
-
 <p align="center">
   <a href="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/actions/workflows/ci.yml"><img src="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   &nbsp;
@@ -34,11 +30,13 @@ The console replays the published study, five saved runs, and the citation check
 
 † Baseline claims are fetched excerpts (verify by construction); the pipeline fails on product choice, refusal, and not-found.
 
-![Pass rate by configuration](docs/pass_rate.png)
+Pass rate is the mean of the per-task means. The cost figure is why Sonnet stays off the recommended config. The failure figure is the three config C misses, all of them review-flag over-escalation.
+
+![Pass rate by configuration, with a 95% bootstrap interval](docs/pass_rate.png)
 
 <p align="center">
-  <img src="reports/analysis/cost_quality.png" alt="Cost–quality frontier" width="48%">
-  <img src="reports/analysis/failures_C.png" alt="Failure taxonomy for config C" width="48%">
+  <img src="reports/analysis/cost_quality.png" alt="Cost per task against pass rate. Sonnet is about 16 times the Haiku config for about two points." width="48%">
+  <img src="reports/analysis/failures_C.png" alt="Config C failures: three of sixty runs, all review-flag over-escalation" width="48%">
 </p>
 
 **What moved the needle**
@@ -56,22 +54,9 @@ The 240 rows are the files named in [`reports/canonical.json`](reports/canonical
 
 ## Architecture
 
-![Architecture](docs/assets/diagrams/hea-architecture.svg)
+Claude Code calls the MCP server. Every citeable document is appended to `evidence.jsonl` in that run. The verifier accepts a claim only when the quote is a verbatim span of one of those documents.
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-  Q[Question] --> Agent[Claude Code + Skills]
-  Agent --> MCP[6-tool MCP server]
-  MCP --> FDA[openFDA]
-  MCP --> CT[ClinicalTrials.gov]
-  MCP --> CMS[CMS NCDs]
-  MCP --> Ev[evidence.jsonl]
-  Agent --> Ans[Structured answer]
-  Ans --> V[Verifier]
-  Ev --> V
-  V --> Grade[Golden-task grade]
-```
+![Question, Claude Code, six MCP tools, openFDA, ClinicalTrials.gov, CMS, and the verbatim verifier](docs/assets/diagrams/hea-architecture.svg)
 
 | Layer | Role |
 |---|---|
@@ -106,7 +91,7 @@ make analysis                     # regenerate paired deltas + figures
 ## Repository layout
 
 ```text
-docs/assets/          banner + architecture diagram
+docs/assets/          architecture diagram
 agent_workspace/      Claude Code Agent Skills
 src/cmg_agent/
   mcp_server.py       6-tool MCP server

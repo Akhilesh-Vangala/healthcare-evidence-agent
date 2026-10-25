@@ -1,13 +1,3 @@
-<p align="center">
-  <a href="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/actions/workflows/ci.yml"><img src="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  &nbsp;
-  <img src="https://img.shields.io/badge/runtimes-Claude%20Code%20%2B%20Anthropic%20API-0f766e?style=flat-square" alt="Runtimes">
-  <img src="https://img.shields.io/badge/MCP-6%20tools-0ea5e9?style=flat-square" alt="MCP">
-  <img src="https://img.shields.io/badge/Agent%20Skills-4-38bdf8?style=flat-square" alt="Skills">
-  <img src="https://img.shields.io/badge/golden%20pass-95%25-14b8a6?style=flat-square" alt="Pass rate">
-  <img src="https://img.shields.io/badge/license-MIT-334155?style=flat-square" alt="MIT">
-</p>
-
 # Healthcare Evidence Agent
 
 A governed AI agent that answers biotech commercial, medical and government-affairs questions over **FDA labels**, **ClinicalTrials.gov** and **Medicare coverage decisions**. It can only cite a document a tool retrieved in that run. Everything else is a grader's decision, not the model's:

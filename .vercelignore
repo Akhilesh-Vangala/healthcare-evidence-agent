@@ -1,10 +1,7 @@
-frontend
+# Applies to both Vercel projects in this repo (console: root frontend/, API: repo root). Never exclude frontend/;
+# the API bundle drops it through functions.excludeFiles in vercel.json.
 runs
 .cache
 .venv
-tests
-reports
-examples
-docs
 **/__pycache__
 .env*

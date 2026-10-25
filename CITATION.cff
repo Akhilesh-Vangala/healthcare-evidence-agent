@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this agent or its evaluation, please cite it as below."
+title: "Healthcare Evidence Agent: a governed tool-using agent with verbatim citation checking"
+type: software
+authors:
+  - family-names: Vangala
+    given-names: Sai Akhilesh
+    affiliation: New York University
+license: MIT
+repository-code: "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent"
+url: "https://healthcare-evidence.vercel.app"
+version: 1.0.0
+date-released: 2026-10-25
+keywords: [ai-agents, mcp, agent-skills, llm-evaluation, claude, hallucination, clinical-trials, fda]

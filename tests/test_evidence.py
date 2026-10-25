@@ -17,3 +17,11 @@ def test_record_and_load_roundtrip(tmp_path: Path, monkeypatch):
     rows = load(path)
     assert set(rows) == {"fda:x:indications_and_usage", "ctgov:NCT01234567"}
     assert rows["fda:x:indications_and_usage"]["brand_name"] == "X"
+
+
+def test_brand_and_generic_from_product_elements_when_openfda_block_is_missing():
+    from cmg_agent.sources import _names_from_product_elements
+
+    assert _names_from_product_elements("TECENTRIQ atezolizumab ATEZOLIZUMAB WATER") == ("TECENTRIQ", "atezolizumab")
+    assert _names_from_product_elements("Tecentriq Hybreza atezolizumab and hyaluronidase-tqjs") == (
+        "TECENTRIQ HYBREZA", "atezolizumab")

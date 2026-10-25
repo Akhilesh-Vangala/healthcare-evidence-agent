@@ -30,6 +30,13 @@ CONFIGS: dict[str, AgentConfig] = {
     "D_tools_skills_sonnet": AgentConfig(name="D_tools_skills_sonnet", model="claude-sonnet-5-5"),
 }
 
+# The same configurations on the Anthropic Messages API runtime (api_runner): same prompts, tools, skills and grader.
+API_CONFIGS = {
+    "A_api_closed_book": dict(use_tools=False, use_skills=False),
+    "B_api_tools_only": dict(use_tools=True, use_skills=False),
+    "C_api_tools_skills": dict(use_tools=True, use_skills=True),
+}
+
 OPEN_WEIGHT_MODEL = "qwen2.5:7b"  # config "E_open_weight": same tools and skills, local model via Ollama
 
 CATEGORY_TO_WORKFLOW = {
@@ -80,15 +87,30 @@ def run_baseline(task: dict[str, Any], runs_dir: Path) -> dict[str, Any]:
     return {"answer": answer, "evidence": ev, "latency_s": round(time.perf_counter() - start, 2), "error": None}
 
 
+_CAP = None
+
+
+def _cap():
+    """One spend cap shared by every API run in this process (HEA_USD_CAP)."""
+    global _CAP
+    if _CAP is None:
+        from cmg_agent.spend import SpendCap
+
+        _CAP = SpendCap.from_env()
+    return _CAP
+
+
 def run_one(task: dict[str, Any], cfg_name: str, runs_dir: Path) -> dict[str, Any]:
     if cfg_name == "BASELINE":
         out = run_baseline(task, runs_dir)
         graded = grade(task, out["answer"], out["evidence"])
         return {**graded, "config": cfg_name, "latency_s": out["latency_s"], "cost_usd_list_price": 0.0,
                 "error": out["error"], "tool_calls": None, "skills_loaded": [], "run_dir": None}
-    if cfg_name.startswith("E_open_weight"):
-        from cmg_agent import ollama_runner
-        res = ollama_runner.run(task["query"], model=OPEN_WEIGHT_MODEL, runs_dir=runs_dir)
+    if cfg_name in API_CONFIGS:
+        from cmg_agent import api_runner
+
+        res = api_runner.run(task["query"], api_runner.ApiConfig(name=cfg_name, **API_CONFIGS[cfg_name]), runs_dir,
+                             cap=_cap())
     else:
         res = run(task["query"], CONFIGS[cfg_name], runs_dir)
     ev = evidence.load(Path(res.run_dir) / "evidence.jsonl")

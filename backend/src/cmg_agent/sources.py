@@ -56,31 +56,58 @@ def fda_search_labels(drug: str, limit: int = 5) -> dict[str, Any]:
     (e.g. KEYTRUDA vs KEYTRUDA QLEX), and that choice is part of the task.
     """
     term = drug.strip().replace('"', "")
-    params = {
-        "search": f'openfda.brand_name:"{term}" OR openfda.generic_name:"{term}"',
-        "limit": max(1, min(limit, 10)),
-    }
-    try:
-        data, _ = _http().get_json(FDA_URL, params=params)
-    except Exception as exc:  # openFDA answers 404 when nothing matches
-        if "404" in str(exc):
-            return {"query": drug, "candidates": [], "note": "No FDA label matched this name."}
-        raise
+    limit = max(1, min(limit, 10))
+    items = _fda_search(f'openfda.brand_name:"{term}" OR openfda.generic_name:"{term}"', limit)
+    name_source = "openfda"
+    if not items:
+        # Some current labels ship without the harmonized `openfda` block (TECENTRIQ did in October 2026), so the
+        # name search misses them. Fall back to the label's own product text and say so in the result.
+        items = _fda_search(f'spl_product_data_elements:"{term}"', limit)
+        name_source = "spl_product_data_elements"
+    if not items:
+        return {"query": drug, "candidates": [], "note": "No FDA label matched this name."}
     candidates = []
-    for item in data.get("results", []):
-        ofda = item.get("openfda", {})
+    for item in items:
+        ofda = item.get("openfda") or {}
+        brand, generic = (ofda.get("brand_name") or [""])[0], (ofda.get("generic_name") or [""])[0]
+        if not brand:
+            brand, generic = _names_from_product_elements((item.get("spl_product_data_elements") or [""])[0])
         candidates.append(
             {
                 "set_id": item.get("set_id"),
-                "brand_name": (ofda.get("brand_name") or [""])[0],
-                "generic_name": (ofda.get("generic_name") or [""])[0],
+                "brand_name": brand,
+                "generic_name": generic,
                 "manufacturer": (ofda.get("manufacturer_name") or [""])[0],
                 "route": ofda.get("route") or [],
                 "effective_time": item.get("effective_time"),
                 "sections_available": [s for s in LABEL_SECTIONS if item.get(s)],
+                "name_source": name_source if ofda.get("brand_name") is None else "openfda",
             }
         )
     return {"query": drug, "candidates": candidates}
+
+
+def _fda_search(search: str, limit: int) -> list[dict[str, Any]]:
+    try:
+        data, _ = _http().get_json(FDA_URL, params={"search": search, "limit": limit})
+    except Exception as exc:  # openFDA answers 404 when nothing matches
+        if "404" in str(exc):
+            return []
+        raise
+    return data.get("results", [])
+
+
+def _names_from_product_elements(elements: str) -> tuple[str, str]:
+    """'TECENTRIQ atezolizumab ATEZOLIZUMAB ...' -> ('TECENTRIQ', 'atezolizumab'); 'Tecentriq Hybreza atezolizumab
+    and hyaluronidase-tqjs ...' -> ('TECENTRIQ HYBREZA', 'atezolizumab'). The brand is the leading run of capitalized
+    tokens; the generic name is the first lower-case token after it."""
+    tokens = elements.split()
+    brand, i = [], 0
+    while i < len(tokens) and tokens[i][:1].isupper():
+        brand.append(tokens[i])
+        i += 1
+    generic = tokens[i] if i < len(tokens) else ""
+    return " ".join(brand).upper(), generic
 
 
 def fda_get_label_section(set_id: str, section: str, offset: int = 0) -> dict[str, Any]:
@@ -91,8 +118,10 @@ def fda_get_label_section(set_id: str, section: str, offset: int = 0) -> dict[st
     item = (data.get("results") or [None])[0]
     if not item:
         return {"error": f"No label with set_id {set_id}"}
-    ofda = item.get("openfda", {})
-    brand = (ofda.get("brand_name") or [""])[0]
+    ofda = item.get("openfda") or {}
+    brand, generic = (ofda.get("brand_name") or [""])[0], (ofda.get("generic_name") or [""])[0]
+    if not brand:  # same fallback as search: the label's own product text when the openfda block is missing
+        brand, generic = _names_from_product_elements((item.get("spl_product_data_elements") or [""])[0])
     raw = " ".join(item.get(section) or [])
     if not raw:
         return {
@@ -113,7 +142,7 @@ def fda_get_label_section(set_id: str, section: str, offset: int = 0) -> dict[st
     return {
         "source_id": source_id,
         "brand_name": brand,
-        "generic_name": (ofda.get("generic_name") or [""])[0],
+        "generic_name": generic,
         "effective_time": item.get("effective_time"),
         "section": section,
         "url": url,

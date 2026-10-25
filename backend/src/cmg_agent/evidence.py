@@ -8,18 +8,34 @@ what the agent actually saw, not against what it claims to have seen.
 
 from __future__ import annotations
 
+import contextlib
+import contextvars
 import json
 import os
 import re
 import time
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
 DEFAULT_PATH = Path(__file__).resolve().parents[3] / ".cache" / "evidence_default.jsonl"
 
+# In-process runs (the API runtime, the web service) bind their own evidence file per run; the stdio MCP server used
+# by Claude Code is one process per run and uses CMG_EVIDENCE_PATH instead.
+_BOUND: contextvars.ContextVar[Path | None] = contextvars.ContextVar("evidence_path", default=None)
+
+
+@contextlib.contextmanager
+def bound_to(path: Path) -> Iterator[None]:
+    token = _BOUND.set(path)
+    try:
+        yield
+    finally:
+        _BOUND.reset(token)
+
 
 def _path() -> Path:
-    p = Path(os.environ.get("CMG_EVIDENCE_PATH") or DEFAULT_PATH)
+    p = _BOUND.get() or Path(os.environ.get("CMG_EVIDENCE_PATH") or DEFAULT_PATH)
     p.parent.mkdir(parents=True, exist_ok=True)
     return p
 

@@ -2,9 +2,9 @@
   "mcpServers": {
     "healthcare-evidence": {
       "command": "python",
-      "args": ["-m", "cmg_agent.mcp_server"],
+      "args": ["-m", "hea.mcp_server"],
       "env": {
-        "CMG_EVIDENCE_PATH": "./.cache/evidence_session.jsonl"
+        "HEA_EVIDENCE_PATH": "./.cache/evidence_session.jsonl"
       }
     }
   }

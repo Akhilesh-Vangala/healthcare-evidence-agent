@@ -1,6 +1,6 @@
 """MCP server exposes the six public-data tools."""
 
-from cmg_agent import mcp_server
+from hea import mcp_server
 
 
 def test_six_tools_registered():
@@ -19,4 +19,4 @@ def test_six_tools_registered():
 
 
 def test_server_metadata():
-    assert mcp_server.server.name == "cmg"
+    assert mcp_server.server.name == "hea"

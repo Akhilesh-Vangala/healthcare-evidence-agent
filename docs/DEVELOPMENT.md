@@ -12,7 +12,7 @@ make lint
 ```text
 frontend/               operator console
 agent/workspace/        Claude Code skills
-backend/src/cmg_agent/  runtime, tools, verifier, analysis
+backend/src/hea/  runtime, tools, verifier, analysis
 evals/golden/           30 golden tasks
 reports/                raw ablation JSON
 examples/agent_runs/    checked-in traces
@@ -24,10 +24,10 @@ Repo-root `.mcp.json` registers the stdio server. Or:
 
 ```bash
 hea-mcp
-# equivalent: python -m cmg_agent.mcp_server
+# equivalent: python -m hea.mcp_server
 ```
 
-Set `CMG_EVIDENCE_PATH` per run so evidence logs do not collide.
+Set `HEA_EVIDENCE_PATH` per run so evidence logs do not collide.
 
 ## Offline CI
 

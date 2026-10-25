@@ -1,4 +1,4 @@
-/** Same quote rule as src/cmg_agent/verify.py and evidence.normalize. */
+/** Same quote rule as src/hea/verify.py and evidence.normalize. */
 
 const QUOTE_MAP: Record<string, string> = {
   "\u2018": "'",

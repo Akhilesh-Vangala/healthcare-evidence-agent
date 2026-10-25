@@ -17,8 +17,8 @@
 | Claim | Evidence in-repo |
 | --- | --- |
 | **95%** pass (CI **87–100%**) vs **20%** fixed pipeline | `reports/` + README table + `reports/analysis/REPORT.md` |
-| Claude agent, **6-tool MCP**, **4 Agent Skills** | `backend/src/cmg_agent/mcp_server.py`, `agent/workspace/.claude/skills/` |
-| FDA / trials / Medicare | `backend/src/cmg_agent/sources.py` |
+| Claude agent, **6-tool MCP**, **4 Agent Skills** | `backend/src/hea/mcp_server.py`, `agent/workspace/.claude/skills/` |
+| FDA / trials / Medicare | `backend/src/hea/sources.py` |
 | **94%** verified claims, **0** invented trial IDs | ablation summary; failure taxonomy |
 | Tools **+57 pts**; skills restore refusals; Sonnet **+2 pts** at ~16× cost / **$0.0033**/task | paired deltas in `reports/analysis/` |
 

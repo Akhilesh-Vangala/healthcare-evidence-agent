@@ -30,7 +30,7 @@ def main() -> None:
     ax.bar(
         range(len(ROWS)),
         [m * 100 for m in means],
-        yerr=[[l * 100 for l in low], [h * 100 for h in high]],
+        yerr=[[lo * 100 for lo in low], [hi * 100 for hi in high]],
         color=colors,
         capsize=4,
         ecolor="#334155",

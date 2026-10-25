@@ -6,9 +6,9 @@ Healthcare Evidence Agent answers commercial, medical, and government-affairs qu
 question
    │
    ▼
-Claude Code (headless)  +  4 Agent Skills (on demand)
+Claude Code (headless)  or  Anthropic Messages API loop     +  4 Agent Skills (on demand)
    │
-   ├── MCP server "cmg" (stdio)
+   ├── MCP server "hea" (stdio for Claude Code, in-process for the API runtime)
    │     fda_search_labels / fda_get_label_section
    │     trials_search / trials_get
    │     cms_ncd_search / cms_ncd_get
@@ -25,10 +25,12 @@ verifier  claim OK ⇔ source_id ∈ this run  AND  quote ⊆ document (verbatim
 
 | Path | Role |
 | --- | --- |
-| `claude_runner.py` | Primary agent: headless Claude Code (`claude -p`), MCP tools, skills workspace |
+| `claude_runner.py` | Published study runtime: headless Claude Code (`claude -p`), MCP over stdio, skills workspace |
+| `api_runner.py` | Second runtime: tool-use loop on the Anthropic Messages API with the same prompt, schema, MCP registry (in-process), skills text (`load_skill`) and grader; prompt caching; hard USD cap (`spend.py`) |
 | `agent.py` | Fixed pipeline baseline (no LLM) for ablation comparisons |
-| `ollama_runner.py` | Same tools/skills loop on a local open-weight model |
-| `api/app.py` | FastAPI surface over the baseline agent + skill catalog |
+| `server.py` | HTTP service for the console: live tools, live citation check, recorded runs, streamed agent (rate and spend limits in `limits.py`, fail closed) |
+
+Both runtimes are graded by the same `verify.grade`; [`reports/analysis/RUNTIME.md`](../reports/analysis/RUNTIME.md) compares them on the golden set.
 
 ## MCP tools (6)
 
@@ -56,7 +58,7 @@ Loaded from `agent/workspace/.claude/skills/` when the Claude Code workspace inc
 | `trial-landscape` | Trial search procedure; existence ≠ efficacy |
 | `review-escalation` | When to escalate vs refuse |
 
-The older copies under `backend/src/cmg_agent/skills/*/SKILL.md` feed the baseline FastAPI skill catalog only. Claude Code uses the workspace skills.
+The older copies under `backend/src/hea/skills/*/SKILL.md` feed the baseline FastAPI skill catalog only. Claude Code uses the workspace skills.
 
 ## Verifier contract
 

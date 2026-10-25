@@ -1,6 +1,6 @@
 """Bootstrap CI helper used in eval summaries."""
 
-from cmg_agent.eval_agent import bootstrap_ci
+from hea.eval_agent import bootstrap_ci
 
 
 def test_bootstrap_ci_bounds_contain_mean():

@@ -1,6 +1,6 @@
 """Paired bootstrap and failure summaries over synthetic rows."""
 
-from cmg_agent.analysis.paired import paired_delta, summarize_efficiency, summarize_failures
+from hea.analysis.paired import paired_delta, summarize_efficiency, summarize_failures
 
 
 def _row(task_id, config, passed, **kw):

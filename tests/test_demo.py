@@ -2,7 +2,7 @@
 
 import sys
 
-from cmg_agent.demo import DEFAULT_RUN, main
+from hea.demo import DEFAULT_RUN, main
 
 
 def test_default_run_exists():

@@ -3,9 +3,9 @@
 import json
 from pathlib import Path
 
-from cmg_agent.contracts import parse_answer
-from cmg_agent.provenance import build_provenance
-from cmg_agent.replay import replay_run
+from hea.contracts import parse_answer
+from hea.provenance import build_provenance
+from hea.replay import replay_run
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLE = ROOT / "examples/agent_runs/A01_keytruda_vs_keytruda_qlex"

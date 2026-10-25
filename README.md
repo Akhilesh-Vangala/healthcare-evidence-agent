@@ -95,7 +95,7 @@ frontend/                 operator console (study, traces, citation check)
 agent/
   workspace/              Claude Code skills used by the measured runs
   workspace_noskills/     same workspace with skills removed (config B)
-backend/src/cmg_agent/
+backend/src/hea/
   claude_runner.py        headless agent runtime
   mcp_server.py           6-tool MCP server
   sources.py              openFDA, ClinicalTrials.gov, CMS

@@ -1,358 +1,218 @@
 import { useEffect, useMemo, useState } from "react";
+import { type Health, api } from "./api";
 import study from "./generated/study.json";
-import { checkClaim, type CheckReason } from "./verify";
+import { Ask } from "./pages/Ask";
+import { Check } from "./pages/Check";
+import { Explorer } from "./pages/Explorer";
 
-type Page = "overview" | "study" | "runs" | "check";
+type Page = "overview" | "ask" | "explorer" | "check" | "study" | "runs";
 
-const PAGES: { id: Page; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "study", label: "Study" },
-  { id: "runs", label: "Saved runs" },
-  { id: "check", label: "Citation check" },
+const PAGES: { id: Page; label: string; dot: string }[] = [
+  { id: "overview", label: "Overview", dot: "var(--teal)" },
+  { id: "ask", label: "Ask the agent", dot: "var(--violet)" },
+  { id: "explorer", label: "Evidence explorer", dot: "var(--sky)" },
+  { id: "check", label: "Citation check", dot: "var(--teal)" },
+  { id: "study", label: "Study", dot: "var(--amber)" },
+  { id: "runs", label: "Saved runs", dot: "var(--muted)" },
 ];
 
-const REASON: Record<CheckReason, string> = {
-  ok: "Quote is in the retrieved source.",
-  quote_too_short: "Quote is under 20 characters after normalization.",
-  quote_not_in_source: "Quote is not a verbatim span of the source.",
-  unknown_source_id: "That source was not retrieved in this run.",
+type RuntimeRow = { id: string; label: string; pass_rate: number; ci: number[]; n_runs: number; claim_precision: number | null;
+  cost_usd: number | null; latency_s: number; cache_share?: number | null };
+type Extras = {
+  runtime?: { configs: RuntimeRow[]; deltas: Array<{ contrast: string; delta: number; ci95: number[]; significant: boolean }>; note: string };
+  redteam?: { runs: number; pass_rate: number; tasks: Array<{ id: string; category: string; passes: boolean[]; failed_checks: string[] }>; note: string };
 };
+const extra = study as typeof study & Extras;
 
-const PRESET_SOURCE =
-  "KEYTRUDA is a programmed death receptor-1 (PD-1)-blocking antibody indicated for the treatment of patients with unresectable or metastatic melanoma.";
-
-function pageFromHash(): Page {
-  const id = window.location.hash.replace("#", "");
-  return PAGES.some((p) => p.id === id) ? (id as Page) : "overview";
-}
-
-function pct(n: number): string {
-  return `${Math.round(n * 100)}%`;
-}
-
-function pts(n: number): string {
-  const rounded = Math.round(n * 1000) / 10;
-  return `${rounded}%`;
-}
-
-function money(n: number | null): string {
-  if (n == null) return "—";
-  if (n === 0) return "$0";
-  return `$${n.toFixed(4)}`;
-}
+const pct = (n: number) => `${Math.round(n * 1000) / 10}%`;
+const pts = (n: number) => `${Math.round(n * 1000) / 10}`;
+const money = (n: number | null) => (n == null ? "—" : n === 0 ? "$0" : `$${n.toFixed(4)}`);
+const pageFromHash = (): Page => (PAGES.some((p) => p.id === location.hash.slice(1)) ? (location.hash.slice(1) as Page) : "overview");
 
 export function App() {
   const [page, setPage] = useState<Page>(pageFromHash);
-  const [traceId, setTraceId] = useState(study.traces[0].id);
-  const [category, setCategory] = useState("all");
+  const [health, setHealth] = useState<Health | null>(null);
 
   useEffect(() => {
     const onHash = () => setPage(pageFromHash());
     window.addEventListener("hashchange", onHash);
+    api.health().then(setHealth).catch(() => setHealth(null));
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
-
-  function go(next: Page) {
-    window.location.hash = next;
-    setPage(next);
-  }
-
-  const categories = useMemo(
-    () => ["all", ...Array.from(new Set(study.tasks.map((t) => t.category)))],
-    [],
-  );
-  const tasks = study.tasks.filter((t) => category === "all" || t.category === category);
-  const trace = study.traces.find((t) => t.id === traceId) ?? study.traces[0];
-  const headline = study.configs.find((c) => c.id === "C_tools_skills");
 
   return (
     <div className="shell">
       <header className="top">
         <div className="brand">
           <span className="mark">HEA</span>
-          <div>
-            <strong>Healthcare Evidence Agent</strong>
-            <em>Operator console · public data · not medical advice</em>
-          </div>
+          <div><strong>Healthcare Evidence Agent</strong><em>Public data only · not medical advice · no PHI</em></div>
         </div>
-        <nav>
-          {PAGES.map((item) => (
-            <button
-              key={item.id}
-              className={page === item.id ? "on" : ""}
-              onClick={() => go(item.id)}
-              type="button"
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
+        <span className={`status ${health?.answering.enabled ? "on" : ""}`}>
+          <i />{health ? (health.answering.enabled ? "Live agent on" : "Tools live · agent replay") : "API offline · replay only"}
+        </span>
       </header>
-
-      {page === "overview" && (
-        <main>
-          <p className="kicker">Evaluation, citation control, human review</p>
-          <h1>A tool-using agent that cannot cite a document it did not retrieve.</h1>
-          <p className="lede">
-            The worked example is FDA labels, ClinicalTrials.gov, and Medicare coverage decisions.
-            The thing being measured is the agent: six tools, four skills, a grader that checks
-            quotes word for word, and a review flag when the question should not be answered alone.
-            This site does not call a model. It replays the published study and the citation rule.
-          </p>
-          <section className="metrics">
-            <article>
-              <b>95%</b>
-              <span>config C pass rate</span>
-              <small>CI {headline ? `${pct(headline.ci[0])}–${pct(headline.ci[1])}` : ""} · 60 runs</small>
-            </article>
-            <article>
-              <b>20%</b>
-              <span>fixed pipeline</span>
-              <small>same 30 tasks, no model</small>
-            </article>
-            <article>
-              <b>94%</b>
-              <span>claims verified on C</span>
-              <small>0 invented trial IDs with tools</small>
-            </article>
-            <article>
-              <b>$0.0033</b>
-              <span>list cost per task</span>
-              <small>Haiku. Sonnet was ~16× for +1.7 pts</small>
-            </article>
-          </section>
-          <section className="split">
-            <div>
-              <h2>What is reusable</h2>
-              <ul>
-                <li>MCP tools over three public APIs, each document written to an evidence log.</li>
-                <li>Skills for product disambiguation, quotes, trials, and when to stop or escalate.</li>
-                <li>A grader that is not the model. Paraphrase fails. An unseen NCT id fails the task.</li>
-                <li>Saved runs you can re-grade later, including cost, latency, and review reasons.</li>
-              </ul>
-            </div>
-            <div>
-              <h2>What this console will not do</h2>
-              <ul>
-                <li>Answer a new clinical question. That path is Claude Code on your machine.</li>
-                <li>Treat the red-team prompt file as a score. It has not been run.</li>
-                <li>Average the 90% pilot of config C into the 95%. Those 30 runs sit outside the 240.</li>
-              </ul>
-            </div>
-          </section>
-          <p className="note">{study.excluded_note} {study.redteam_note}</p>
-        </main>
-      )}
-
-      {page === "study" && (
-        <main>
-          <h1>Published study · {study.n_rows} rows</h1>
-          <p className="lede">
-            One factor changes at a time. Pass rate is the mean of per-task means, with a bootstrap
-            95% interval. A and B and C were repeated twice. Baseline and Sonnet once.
-          </p>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Configuration</th>
-                  <th>Pass</th>
-                  <th>95% CI</th>
-                  <th>Runs</th>
-                  <th>Claim precision</th>
-                  <th>Cost / task</th>
-                  <th>Latency</th>
-                </tr>
-              </thead>
-              <tbody>
-                {study.configs.map((row) => (
-                  <tr key={row.id} className={row.id === "C_tools_skills" ? "focus" : ""}>
-                    <td>{row.label}</td>
-                    <td>{pct(row.pass_rate)}</td>
-                    <td>{pct(row.ci[0])}–{pct(row.ci[1])}</td>
-                    <td>{row.n_runs}</td>
-                    <td>{row.claim_precision == null ? "—" : pct(row.claim_precision)}</td>
-                    <td>{money(row.cost_usd)}</td>
-                    <td>{row.latency_s}s</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <h2>Paired change</h2>
-          <ul className="deltas">
-            {study.deltas.map((d) => (
-              <li key={`${d.config_a}-${d.config_b}`}>
-                <code>{d.config_a}</code> → <code>{d.config_b}</code>
-                <strong>{d.delta_pass_rate >= 0 ? "+" : ""}{pts(d.delta_pass_rate)}</strong>
-                <span>
-                  [{d.delta_ci95[0] >= 0 ? "+" : ""}{pts(d.delta_ci95[0])}, {d.delta_ci95[1] >= 0 ? "+" : ""}{pts(d.delta_ci95[1])}]
-                  {" · "}
-                  {d.delta_significant_vs_zero ? "interval excludes 0" : "interval includes 0"}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <h2>Config C, task by task</h2>
-          <div className="chips">
-            {categories.map((cat) => (
-              <button key={cat} type="button" className={category === cat ? "on" : ""} onClick={() => setCategory(cat)}>
-                {cat.replaceAll("_", " ")}
-              </button>
-            ))}
-          </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Task</th>
-                  <th>Category</th>
-                  <th>Repeats</th>
-                  <th>Question</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tasks.map((task) => {
-                  const ok = task.passes.every(Boolean);
-                  return (
-                    <tr key={task.id}>
-                      <td><code>{task.id}</code></td>
-                      <td>{task.category.replaceAll("_", " ")}</td>
-                      <td className={ok ? "ok" : "bad"}>
-                        {task.passes.map((pass) => (pass ? "pass" : "fail")).join(" · ") || "—"}
-                        {task.failed_checks.length > 0 && (
-                          <small>{task.failed_checks.join(", ")}</small>
-                        )}
-                      </td>
-                      <td>{task.query}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </main>
-      )}
-
-      {page === "runs" && (
-        <main>
-          <h1>Saved runs</h1>
-          <p className="lede">
-            Five runs checked into the repository. Each claim was re-checked against that run’s
-            evidence log. Green means the quote is a verbatim span of a source retrieved then.
-          </p>
-          <div className="chips">
-            {study.traces.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={item.id === trace.id ? "on" : ""}
-                onClick={() => setTraceId(item.id)}
-              >
-                {item.id} · {item.title}
-              </button>
-            ))}
-          </div>
-          <section className="run">
-            <p className="kicker">{trace.config} · {trace.model}</p>
-            <h2>{trace.query}</h2>
-            <p className="status">
-              <b>{trace.status}</b>
-              {trace.needs_human_review ? " · human review" : " · no review flag"}
-              {" · "}
-              {trace.n_sources} sources · {trace.latency_s}s · {money(trace.cost_usd)}
-            </p>
-            <p>{trace.summary}</p>
-            {trace.review_reasons.length > 0 && (
-              <p className="reasons">{trace.review_reasons.join(" · ")}</p>
-            )}
-            {trace.claims.length === 0 && <p className="note">No claims. The grader expects that for this status.</p>}
-            {trace.claims.map((claim, index) => (
-              <article key={`${claim.source_id}-${index}`} className={claim.verified ? "claim ok" : "claim bad"}>
-                <header>
-                  <b>{claim.verified ? "verified" : claim.reason}</b>
-                  <code>{claim.source_id}</code>
-                </header>
-                <p>{claim.statement}</p>
-                <blockquote>{claim.quote}</blockquote>
-                <small>
-                  {[claim.kind, claim.brand_name, claim.section].filter(Boolean).join(" · ")}
-                </small>
-              </article>
-            ))}
-          </section>
-        </main>
-      )}
-
-      {page === "check" && <Checker />}
+      <nav className="tabs">
+        {PAGES.map((p) => (
+          <button key={p.id} type="button" className={page === p.id ? "on" : ""} onClick={() => { location.hash = p.id; setPage(p.id); }}>
+            <span className="dot" style={{ background: p.dot }} />{p.label}
+          </button>
+        ))}
+      </nav>
+      {page === "overview" && <Overview go={(p) => { location.hash = p; setPage(p); }} />}
+      {page === "ask" && <Ask health={health} />}
+      {page === "explorer" && <Explorer />}
+      {page === "check" && <Check />}
+      {page === "study" && <Study />}
+      {page === "runs" && <Runs />}
+      <footer>MIT · <a href="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent">source</a> · <a href="/api/docs">API</a> · Sai Akhilesh Vangala</footer>
     </div>
   );
 }
 
-function Checker() {
-  const [source, setSource] = useState(PRESET_SOURCE);
-  const [quote, setQuote] = useState(
-    "KEYTRUDA is a programmed death receptor-1 (PD-1)-blocking antibody indicated for the treatment of patients with unresectable or metastatic melanoma.",
-  );
-  const [retrieved, setRetrieved] = useState(true);
-  const reason = checkClaim(source, quote, retrieved);
-
+function Overview({ go }: { go: (p: Page) => void }) {
+  const c = study.configs.find((x) => x.id === "C_tools_skills");
+  const api_c = extra.runtime?.configs.find((x) => x.id === "C_api_tools_skills");
   return (
     <main>
-      <h1>Citation check</h1>
-      <p className="lede">
-        Same rule as the Python grader: the source has to be from this run, and the quote has to
-        survive whitespace and quote normalization as a contiguous substring of at least 20
-        characters. A paraphrase fails. Nothing here is sent to a model.
-      </p>
-      <div className="chips">
-        <button
-          type="button"
-          onClick={() => {
-            setQuote(PRESET_SOURCE);
-            setRetrieved(true);
-          }}
-        >
-          Verbatim
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setQuote("KEYTRUDA is indicated for melanoma and is the preferred PD-1 antibody.");
-            setRetrieved(true);
-          }}
-        >
-          Paraphrase
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setQuote("indicated for melanoma");
-            setRetrieved(true);
-          }}
-        >
-          Too short
-        </button>
-        <button type="button" onClick={() => setRetrieved(false)}>
-          Source not retrieved
-        </button>
+      <section className="hero">
+        <p className="kicker">Evaluation · citation control · human review</p>
+        <h1>A tool-using agent that cannot cite a document it did not retrieve.</h1>
+        <p className="lede">
+          Questions about FDA labels, clinical trials and Medicare coverage. Six MCP tools fetch the evidence, four
+          Agent Skills carry the procedure, and a grader that is not the model checks every quote word for word
+          against what the tools returned in that run. Measured on two runtimes: headless Claude Code and the
+          Anthropic Messages API.
+        </p>
+        <div className="row">
+          <button className="primary" type="button" onClick={() => go("ask")}>Ask the agent</button>
+          <button type="button" onClick={() => go("explorer")}>Explore the evidence tools</button>
+          <button type="button" onClick={() => go("study")}>Read the study</button>
+        </div>
+      </section>
+      <section className="metrics">
+        <article><b>{c ? pct(c.pass_rate) : "—"}</b><span>golden-set pass, tools + skills</span><small>Claude Code · 60 runs · CI {c ? `${pct(c.ci[0])}–${pct(c.ci[1])}` : ""}</small></article>
+        <article><b className="sky">{api_c ? pct(api_c.pass_rate) : "running"}</b><span>same config, API runtime</span><small>{api_c ? `${api_c.n_runs} runs · CI ${pct(api_c.ci[0])}–${pct(api_c.ci[1])}` : "cross-runtime check"}</small></article>
+        <article><b className="amber">0</b><span>invented trial IDs with tools</span><small>closed book invented them in 4 runs</small></article>
+        <article><b className="violet">{extra.redteam ? pct(extra.redteam.pass_rate) : "—"}</b><span>red-team suite</span><small>{extra.redteam ? `${extra.redteam.runs} adversarial runs` : "not yet scored"}</small></article>
+      </section>
+      <section className="pipeline">
+        {[["question", "redacted request"], ["Claude", "plans, loads skills"], ["MCP tools", "openFDA · CT.gov · CMS"], ["evidence log", "every document, per run"],
+          ["verifier", "verbatim quotes · no unseen NCT"], ["review flag", "off-label, comparative, coverage"]].map(([a, b], i) => (
+          <div key={a} className={`stage s${i}`}><b>{a}</b><small>{b}</small></div>
+        ))}
+      </section>
+      <section className="split">
+        <div className="panel"><h2>What is reusable</h2><ul>
+          <li>An MCP server over three public APIs; every document written to a per-run evidence log.</li>
+          <li>Skills for product disambiguation, citation discipline, trial landscapes and escalation.</li>
+          <li>A grader that is not the model: a paraphrase fails, an NCT id the tools never returned fails the task.</li>
+          <li>Two runtimes behind one grader, so a result can be checked outside the harness that produced it.</li>
+        </ul></div>
+        <div className="panel"><h2>What this site will not do</h2><ul>
+          <li>Give medical advice, dosing for a patient, or promotional claims; those are refused or escalated.</li>
+          <li>Average the 90% pilot of config C into the 95%; those 30 runs sit outside the 240.</li>
+          <li>Call a model unless live answering is enabled with rate and spend limits.</li>
+        </ul></div>
+      </section>
+    </main>
+  );
+}
+
+function Study() {
+  const [category, setCategory] = useState("all");
+  const categories = useMemo(() => ["all", ...Array.from(new Set(study.tasks.map((t) => t.category)))], []);
+  const tasks = study.tasks.filter((t) => category === "all" || t.category === category);
+  return (
+    <main>
+      <p className="kicker">Published study · {study.n_rows} rows · Claude Code runtime</p>
+      <h1>What moved the needle</h1>
+      <p className="lede">One factor changes at a time. Pass rate is the mean of per-task means with a bootstrap 95% interval; A, B and C were repeated twice.</p>
+      <div className="bars">
+        {study.configs.map((row) => (
+          <div key={row.id} className={`bar ${row.id === "C_tools_skills" ? "best" : ""}`}>
+            <span>{row.label}</span>
+            <div className="track"><div className="fill" style={{ width: `${row.pass_rate * 100}%` }} /><div className="ci" style={{ left: `${row.ci[0] * 100}%`, width: `${(row.ci[1] - row.ci[0]) * 100}%` }} /></div>
+            <b>{pct(row.pass_rate)}</b><small>{money(row.cost_usd)}</small>
+          </div>
+        ))}
       </div>
-      <label>
-        Source text
-        <textarea value={source} onChange={(e) => setSource(e.target.value)} rows={5} />
-      </label>
-      <label>
-        Quote the agent wants to cite
-        <textarea value={quote} onChange={(e) => setQuote(e.target.value)} rows={4} />
-      </label>
-      <label className="row">
-        <input type="checkbox" checked={retrieved} onChange={(e) => setRetrieved(e.target.checked)} />
-        This source_id was retrieved in the run
-      </label>
-      <p className={reason === "ok" ? "verdict ok" : "verdict bad"}>
-        <b>{reason}</b>
-        <span>{REASON[reason]}</span>
-      </p>
+      <ul className="deltas">
+        {study.deltas.map((d) => (
+          <li key={`${d.config_a}-${d.config_b}`}><code>{d.config_a}</code> → <code>{d.config_b}</code>
+            <strong>{d.delta_pass_rate >= 0 ? "+" : ""}{pts(d.delta_pass_rate)} pts</strong>
+            <span>[{pts(d.delta_ci95[0])}, {pts(d.delta_ci95[1])}] · {d.delta_significant_vs_zero ? "interval excludes 0" : "interval includes 0"}</span></li>
+        ))}
+      </ul>
+
+      {extra.runtime && (
+        <>
+          <h2>Cross-runtime check: the same configurations on the Anthropic API</h2>
+          <p className="lede">{extra.runtime.note}</p>
+          <div className="table-wrap"><table>
+            <thead><tr><th>Configuration</th><th>Pass</th><th>95% CI</th><th>Runs</th><th>Claim precision</th><th>Cost / task</th><th>Latency</th><th>Input from cache</th></tr></thead>
+            <tbody>{extra.runtime.configs.map((r) => (
+              <tr key={r.id} className={r.id === "C_api_tools_skills" ? "focus" : ""}><td>{r.label}</td><td>{pct(r.pass_rate)}</td><td>{pct(r.ci[0])}–{pct(r.ci[1])}</td><td>{r.n_runs}</td>
+                <td>{r.claim_precision == null ? "—" : pct(r.claim_precision)}</td><td>{money(r.cost_usd)}</td><td>{r.latency_s}s</td><td>{r.cache_share == null ? "—" : pct(r.cache_share)}</td></tr>
+            ))}</tbody>
+          </table></div>
+          <ul className="deltas">{extra.runtime.deltas.map((d) => (
+            <li key={d.contrast}><code>{d.contrast}</code><strong>{d.delta >= 0 ? "+" : ""}{pts(d.delta)} pts</strong><span>[{pts(d.ci95[0])}, {pts(d.ci95[1])}] · {d.significant ? "interval excludes 0" : "interval includes 0"}</span></li>
+          ))}</ul>
+        </>
+      )}
+
+      {extra.redteam && (
+        <>
+          <h2>Red-team suite · {extra.redteam.runs} runs</h2>
+          <p className="lede">{extra.redteam.note}</p>
+          <div className="table-wrap"><table>
+            <thead><tr><th>Task</th><th>Attack</th><th>Repeats</th></tr></thead>
+            <tbody>{extra.redteam.tasks.map((t) => (
+              <tr key={t.id}><td><code>{t.id}</code></td><td>{t.category.replaceAll("_", " ")}</td>
+                <td className={t.passes.every(Boolean) ? "ok" : "bad"}>{t.passes.map((p) => (p ? "held" : "failed")).join(" · ")}{t.failed_checks.length > 0 && <small>{t.failed_checks.join(", ")}</small>}</td></tr>
+            ))}</tbody>
+          </table></div>
+        </>
+      )}
+
+      <h2>Config C, task by task (Claude Code)</h2>
+      <div className="chips">{categories.map((cat) => <button key={cat} type="button" className={category === cat ? "on" : ""} onClick={() => setCategory(cat)}>{cat.replaceAll("_", " ")}</button>)}</div>
+      <div className="table-wrap"><table>
+        <thead><tr><th>Task</th><th>Category</th><th>Repeats</th><th>Question</th></tr></thead>
+        <tbody>{tasks.map((task) => (
+          <tr key={task.id}><td><code>{task.id}</code></td><td>{task.category.replaceAll("_", " ")}</td>
+            <td className={task.passes.every(Boolean) ? "ok" : "bad"}>{task.passes.map((p) => (p ? "pass" : "fail")).join(" · ") || "—"}{task.failed_checks.length > 0 && <small>{task.failed_checks.join(", ")}</small>}</td>
+            <td>{task.query}</td></tr>
+        ))}</tbody>
+      </table></div>
+      <p className="note">{study.excluded_note}</p>
+    </main>
+  );
+}
+
+function Runs() {
+  const [traceId, setTraceId] = useState(study.traces[0].id);
+  const trace = study.traces.find((t) => t.id === traceId) ?? study.traces[0];
+  return (
+    <main>
+      <p className="kicker">Checked into the repository</p>
+      <h1>Saved runs</h1>
+      <p className="lede">Five Claude Code runs. Each claim is re-checked against that run's evidence log: green means the quote is a verbatim span of a source retrieved in that run.</p>
+      <div className="chips">{study.traces.map((t) => <button key={t.id} type="button" className={t.id === trace.id ? "on" : ""} onClick={() => setTraceId(t.id)}>{t.id} · {t.title}</button>)}</div>
+      <section className="panel">
+        <p className="kicker">{trace.config} · {trace.model}</p>
+        <h2>{trace.query}</h2>
+        <p className="status-line"><b>{trace.status}</b>{trace.needs_human_review ? " · human review" : " · no review flag"} · {trace.n_sources} sources · {trace.latency_s}s · {money(trace.cost_usd)}</p>
+        <p>{trace.summary}</p>
+        {trace.review_reasons.length > 0 && <p className="banner">{trace.review_reasons.join(" · ")}</p>}
+        {trace.claims.map((claim, i) => (
+          <article key={`${claim.source_id}-${i}`} className={claim.verified ? "claim ok" : "claim bad"}>
+            <header><b>{claim.verified ? "verified" : claim.reason}</b><code>{claim.source_id}</code></header>
+            <p>{claim.statement}</p><blockquote>{claim.quote}</blockquote>
+            <small>{[claim.kind, claim.brand_name, claim.section].filter(Boolean).join(" · ")}</small>
+          </article>
+        ))}
+      </section>
     </main>
   );
 }

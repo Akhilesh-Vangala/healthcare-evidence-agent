@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from cmg_agent.analysis.study import load_canonical_rows, load_manifest, published_summaries
+from hea.analysis.study import load_canonical_rows, load_manifest, published_summaries
 
 ROOT = Path(__file__).resolve().parents[1]
 

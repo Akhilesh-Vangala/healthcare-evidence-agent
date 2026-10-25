@@ -4,7 +4,7 @@
 
 30 author-written tasks in `evals/golden/agent_tasks.json`, spanning labels, ambiguous products, comparisons, trials, Medicare NCDs, refusals / off-label, and not-found.
 
-Grading is fully programmatic (`backend/src/cmg_agent/verify.py`). No LLM-as-judge.
+Grading is fully programmatic (`backend/src/hea/verify.py`). No LLM-as-judge.
 
 ## Configurations
 

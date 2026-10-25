@@ -1,6 +1,6 @@
 """Task-level grading across the check types used by the golden set."""
 
-from cmg_agent.verify import grade
+from hea.verify import grade
 
 EV = {
     "fda:k:indications_and_usage": {

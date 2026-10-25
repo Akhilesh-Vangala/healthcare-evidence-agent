@@ -13,9 +13,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend" / "src"))
 
-from cmg_agent.analysis.study import load_manifest, published_summaries  # noqa: E402
-from cmg_agent.evidence import load  # noqa: E402
-from cmg_agent.verify import verify_claims  # noqa: E402
+from hea.analysis.study import load_manifest, published_summaries  # noqa: E402
+from hea.evidence import load  # noqa: E402
+from hea.verify import verify_claims  # noqa: E402
 
 OUT = ROOT / "frontend" / "src" / "generated" / "study.json"
 
@@ -100,6 +100,44 @@ def _trace(folder: str, task_id: str, title: str) -> dict:
     }
 
 
+def _runtime() -> dict:
+    """Cross-runtime check and red-team results, from reports/analysis/runtime.json (scripts/runtime_crosscheck.py)."""
+    path = ROOT / "reports/analysis/runtime.json"
+    if not path.exists():
+        return {}
+    rt = json.loads(path.read_text())
+    labels = {"closed book": "Haiku, no tools", "tools only": "Haiku + tools", "tools + skills": "Haiku + tools + skills"}
+    ids = {"closed book": "A_api_closed_book", "tools only": "B_api_tools_only", "tools + skills": "C_api_tools_skills"}
+    configs = []
+    for name, c in rt["configs"].items():
+        run = c["runs"]["api"]
+        configs.append({"id": ids[name], "label": labels[name], "pass_rate": c["all_30"]["api"]["mean"],
+                        "ci": c["all_30"]["api"]["ci95"], "n_runs": run["runs"], "claim_precision": run["claim_precision"],
+                        "cost_usd": run["cost_usd_per_task"], "latency_s": run["latency_s_p50"],
+                        "cache_share": run.get("input_from_cache")})
+    c = rt["configs"]["tools + skills"]
+    deltas = [
+        {"contrast": "tools + skills: API − Claude Code, 28 tasks", **_d(c["excluding_drift_28"]["api_minus_claude_code"])},
+        {"contrast": "tools + skills: API − Claude Code, all 30", **_d(c["all_30"]["api_minus_claude_code"])},
+        {"contrast": "API: closed book → tools + skills", **_d(rt["contrasts"]["all_30"]["api A->C"])},
+    ]
+    note = ("Same model, prompts, MCP tools, skills and grader; only the runtime and the date differ. Two tasks changed "
+            "under the study because the live data changed (" + "; ".join(f"{k}: {v}" for k, v in rt["drift_tasks"].items())
+            + "), so the like-for-like comparison is on the other 28.")
+    red = rt["redteam"]
+    redteam = {"runs": red["runs"], "pass_rate": red["pass_rate"],
+               "tasks": [{"id": k, "category": v["category"], "passes": v["passes"], "failed_checks": v["failed_checks"]}
+                         for k, v in red["tasks"].items()],
+               "note": ("Six adversarial prompts × 2 repeats on the API runtime. Every run refused, escalated or reported "
+                        "not found; the two scored failures are RT02 refusals that still attached verified label facts, "
+                        "which the spec forbids.")}
+    return {"runtime": {"configs": configs, "deltas": deltas, "note": note}, "redteam": redteam}
+
+
+def _d(x: dict) -> dict:
+    return {"delta": x["mean"], "ci95": x["ci95"], "significant": x["significant"]}
+
+
 def main() -> int:
     spec = load_manifest()
     summaries = published_summaries()
@@ -139,7 +177,8 @@ def main() -> int:
             "A 30-run single pass of config C (90%) is stored under reports/exploratory "
             "and is not in these figures."
         ),
-        "redteam_note": "evals/adversarial/redteam_tasks.json has not been run.",
+        "redteam_note": "The red-team suite was scored on the API runtime; see reports/analysis/RUNTIME.md.",
+        **_runtime(),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2))

@@ -10,8 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend" / "src"))
 
-from cmg_agent.analysis.paired import paired_delta, summarize_efficiency, summarize_failures  # noqa: E402
-from cmg_agent.analysis.study import load_canonical_rows, load_manifest  # noqa: E402
+from hea.analysis.paired import paired_delta, summarize_efficiency, summarize_failures  # noqa: E402
+from hea.analysis.study import load_canonical_rows, load_manifest  # noqa: E402
 
 REPORTS = ROOT / "reports"
 OUT = REPORTS / "analysis"

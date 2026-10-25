@@ -1,6 +1,6 @@
 """Formal citation invariant: verified ⇒ source in evidence and quote ⊆ text."""
 
-from cmg_agent.verify import verify_claims
+from hea.verify import verify_claims
 
 
 def test_verified_implies_source_and_substring():

@@ -1,4 +1,4 @@
-from cmg_agent.budget import RunBudget
+from hea.budget import RunBudget
 
 
 def test_budget_flags_tool_and_cost_overrun():

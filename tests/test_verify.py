@@ -1,6 +1,6 @@
 """Offline tests for the citation verifier and task grader (no network, no model)."""
 
-from cmg_agent.verify import grade, verify_claims
+from hea.verify import grade, verify_claims
 
 EV = {
     "fda:abc:boxed_warning": {

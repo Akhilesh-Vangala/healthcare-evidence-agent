@@ -4,8 +4,8 @@ import json
 from types import SimpleNamespace
 
 import pytest
-from cmg_agent import api_runner, evidence
-from cmg_agent.spend import BudgetExceeded, SpendCap
+from hea import api_runner, evidence
+from hea.spend import BudgetExceeded, SpendCap
 
 
 class Block(SimpleNamespace):
@@ -55,7 +55,7 @@ def test_loop_loads_skill_calls_tools_submits_and_logs_evidence_per_run(tmp_path
     ])
     r = api_runner.run("q", api_runner.ApiConfig(), tmp_path, client=client)
     assert r.answer == ANSWER and r.skills_loaded == ["cited-evidence"] and r.error is None
-    assert [c["tool"] for c in r.tool_calls] == ["mcp__cmg__cms_ncd_search"]  # the grader's Claude Code naming
+    assert [c["tool"] for c in r.tool_calls] == ["mcp__hea__cms_ncd_search"]  # the grader's Claude Code naming
     assert "cms:ncd:372" in evidence.load(tmp_path / r.run_id / "evidence.jsonl")
     first, second = client.requests
     assert first["cache_control"] == {"type": "ephemeral"} and first["output_config"] == {"effort": "medium"}

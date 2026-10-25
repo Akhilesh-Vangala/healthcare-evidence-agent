@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from cmg_agent.evidence import load, normalize, record
+from hea.evidence import load, normalize, record
 
 
 def test_normalize_collapses_whitespace_and_smart_quotes():
@@ -11,7 +11,7 @@ def test_normalize_collapses_whitespace_and_smart_quotes():
 
 def test_record_and_load_roundtrip(tmp_path: Path, monkeypatch):
     path = tmp_path / "ev.jsonl"
-    monkeypatch.setenv("CMG_EVIDENCE_PATH", str(path))
+    monkeypatch.setenv("HEA_EVIDENCE_PATH", str(path))
     record("fda:x:indications_and_usage", "fda_label", "Alpha beta gamma delta epsilon.", brand_name="X")
     record("ctgov:NCT01234567", "clinical_trial", "A phase 3 study of something useful.")
     rows = load(path)
@@ -20,7 +20,7 @@ def test_record_and_load_roundtrip(tmp_path: Path, monkeypatch):
 
 
 def test_brand_and_generic_from_product_elements_when_openfda_block_is_missing():
-    from cmg_agent.sources import _names_from_product_elements
+    from hea.sources import _names_from_product_elements
 
     assert _names_from_product_elements("TECENTRIQ atezolizumab ATEZOLIZUMAB WATER") == ("TECENTRIQ", "atezolizumab")
     assert _names_from_product_elements("Tecentriq Hybreza atezolizumab and hyaluronidase-tqjs") == (

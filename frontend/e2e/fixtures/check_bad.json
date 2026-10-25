@@ -1,0 +1,14 @@
+{
+ "source_id": "fda:9333c79b-d487-4538-a9f0-71b91a02b287:indications_and_usage",
+ "verified": false,
+ "reason": "quote_not_in_source",
+ "brand_name": "KEYTRUDA",
+ "section": "indications_and_usage",
+ "kind": "fda_label",
+ "document_found": true,
+ "document_chars": 24463,
+ "excerpt": "1 INDICATIONS AND USAGE KEYTRUDA is a programmed death receptor-1 (PD-1)-blocking antibody indicated: Melanoma for the treatment of patients with unresectable or metastatic melanoma. ( 1.1 ) for the adjuvant treatment of adult and pediatric (12 years and older) patients with Stage IIB, IIC, or III melanoma following complete resection. ( 1.1 ) Non-Small Cell Lung Cancer (NSCLC) in combination with pemetrexed and platinum chemotherapy, as first-line treatment of patients with metastatic nonsquamous NSCLC, with no EGFR or ALK genomic tumor aberrations. ( 1.2 ) in combination with carboplatin and either paclitaxel or paclitaxel protein-bound, as first-line treatment of patients with metastatic squamous NSCLC. ( 1.2 ) as a single agent for the first-line treatment of patients with NSCLC expressing PD-L1 [Tumor Proportion Score (TPS) \u22651%] as determined by an FDA-authorized test, with no EGFR or ALK genomic tumor aberrations, and is: Stage III where patients are not candidates for surgical resection or definitive chemoradiation, or metastatic. ( 1.2 , 2.1 ) as a single agent for the treatment of patients with metastatic NSCLC whose tumors express PD-L1 (TPS \u22651%) as determined by an FDA-a",
+ "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9333c79b-d487-4538-a9f0-71b91a02b287",
+ "normalized_quote": "keytruda is a programmed death receptor-1 (pd-1)-activating antibody indicated",
+ "matched_prefix": 49
+}

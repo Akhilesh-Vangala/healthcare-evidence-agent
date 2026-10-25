@@ -56,8 +56,8 @@ export const api = {
 };
 
 /** POST /api/agent/stream and hand each server-sent event to `onEvent` as it arrives. */
-export async function streamAgent(query: string, onEvent: (e: AgentEvent) => void): Promise<void> {
-  const res = await fetch("/api/agent/stream", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }) });
+export async function streamAgent(query: string, onEvent: (e: AgentEvent) => void, signal?: AbortSignal): Promise<void> {
+  const res = await fetch("/api/agent/stream", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }), signal });
   if (!res.ok || !res.body) {
     const data = await res.json().catch(() => ({}));
     throw new Error(typeof data.detail === "string" ? data.detail : res.statusText);

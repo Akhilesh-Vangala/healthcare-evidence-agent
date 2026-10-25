@@ -1,0 +1,51 @@
+{
+ "tool": "fda_search_labels",
+ "args": {
+  "drug": "Keytruda"
+ },
+ "result": {
+  "query": "Keytruda",
+  "candidates": [
+   {
+    "set_id": "097d166f-b73b-41d3-9b37-7653cd2a0c41",
+    "brand_name": "KEYTRUDA QLEX",
+    "generic_name": "PEMBROLIZUMAB AND BERAHYALURONIDASE ALFA-PMPH",
+    "manufacturer": "Merck Sharp & Dohme LLC",
+    "route": [
+     "SUBCUTANEOUS"
+    ],
+    "effective_time": "20260731",
+    "sections_available": [
+     "indications_and_usage",
+     "warnings_and_cautions",
+     "contraindications",
+     "adverse_reactions",
+     "dosage_and_administration",
+     "use_in_specific_populations"
+    ],
+    "name_source": "openfda"
+   },
+   {
+    "set_id": "9333c79b-d487-4538-a9f0-71b91a02b287",
+    "brand_name": "KEYTRUDA",
+    "generic_name": "PEMBROLIZUMAB",
+    "manufacturer": "Merck Sharp & Dohme LLC",
+    "route": [
+     "INTRAVENOUS"
+    ],
+    "effective_time": "20260710",
+    "sections_available": [
+     "indications_and_usage",
+     "warnings_and_cautions",
+     "contraindications",
+     "adverse_reactions",
+     "dosage_and_administration",
+     "use_in_specific_populations"
+    ],
+    "name_source": "openfda"
+   }
+  ]
+ },
+ "ms": 42,
+ "evidence": []
+}

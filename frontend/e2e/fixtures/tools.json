@@ -1,0 +1,151 @@
+{
+ "tools": [
+  {
+   "name": "fda_search_labels",
+   "description": "Find FDA drug labels by brand or generic name. Returns candidate products\n(set_id, brand, generic, manufacturer, sections available) but no label text.\nSeveral products can share a name, so pick the one that matches the request.",
+   "input_schema": {
+    "properties": {
+     "drug": {
+      "title": "Drug",
+      "type": "string"
+     },
+     "limit": {
+      "default": 5,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "drug"
+    ],
+    "title": "fda_search_labelsArguments",
+    "type": "object"
+   }
+  },
+  {
+   "name": "fda_get_label_section",
+   "description": "Read one section of an FDA label. section is one of: indications_and_usage,\nboxed_warning, warnings_and_cautions, contraindications, adverse_reactions,\ndosage_and_administration, use_in_specific_populations. Long sections come back\nin pages; when next_offset is not null, call again with offset=next_offset to read on.",
+   "input_schema": {
+    "properties": {
+     "set_id": {
+      "title": "Set Id",
+      "type": "string"
+     },
+     "section": {
+      "title": "Section",
+      "type": "string"
+     },
+     "offset": {
+      "default": 0,
+      "title": "Offset",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "set_id",
+     "section"
+    ],
+    "title": "fda_get_label_sectionArguments",
+    "type": "object"
+   }
+  },
+  {
+   "name": "trials_search",
+   "description": "Search ClinicalTrials.gov by intervention (drug name), with optional condition,\nphase (e.g. 'PHASE3'), and recruiting-only filter.",
+   "input_schema": {
+    "properties": {
+     "intervention": {
+      "title": "Intervention",
+      "type": "string"
+     },
+     "condition": {
+      "default": "",
+      "title": "Condition",
+      "type": "string"
+     },
+     "phase": {
+      "default": "",
+      "title": "Phase",
+      "type": "string"
+     },
+     "recruiting_only": {
+      "default": false,
+      "title": "Recruiting Only",
+      "type": "boolean"
+     },
+     "max_results": {
+      "default": 8,
+      "title": "Max Results",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "intervention"
+    ],
+    "title": "trials_searchArguments",
+    "type": "object"
+   }
+  },
+  {
+   "name": "trials_get",
+   "description": "Fetch one ClinicalTrials.gov record (summary, enrollment, primary outcomes).",
+   "input_schema": {
+    "properties": {
+     "nct_id": {
+      "title": "Nct Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "nct_id"
+    ],
+    "title": "trials_getArguments",
+    "type": "object"
+   }
+  },
+  {
+   "name": "cms_ncd_search",
+   "description": "Search Medicare National Coverage Determinations by title keywords.",
+   "input_schema": {
+    "properties": {
+     "keywords": {
+      "title": "Keywords",
+      "type": "string"
+     },
+     "max_results": {
+      "default": 8,
+      "title": "Max Results",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "keywords"
+    ],
+    "title": "cms_ncd_searchArguments",
+    "type": "object"
+   }
+  },
+  {
+   "name": "cms_ncd_get",
+   "description": "Read the item description and indications/limitations of one NCD.",
+   "input_schema": {
+    "properties": {
+     "ncd_id": {
+      "title": "Ncd Id",
+      "type": "integer"
+     },
+     "version": {
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "ncd_id"
+    ],
+    "title": "cms_ncd_getArguments",
+    "type": "object"
+   }
+  }
+ ]
+}

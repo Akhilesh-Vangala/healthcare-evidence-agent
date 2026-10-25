@@ -1,0 +1,9 @@
+{
+ "ok": true,
+ "version": "1.0.0",
+ "tools": 6,
+ "answering": {
+  "enabled": false,
+  "reason": "no model key configured"
+ }
+}

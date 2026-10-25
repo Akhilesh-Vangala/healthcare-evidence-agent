@@ -64,7 +64,7 @@ export function App() {
         </main>
         <footer>
           <span>MIT · Sai Akhilesh Vangala</span>
-          <span><a href="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent">Source</a> · <a href="/api/docs">API reference</a> · v{health?.version ?? "1.0.0"}</span>
+          <span><a href="https://github.com/Akhilesh-Vangala/healthcare-evidence-agent">Source</a> · <a href="/api/docs">API reference</a> · v{health?.version ?? "1.1.0"}</span>
         </footer>
       </div>
     </ToastProvider>

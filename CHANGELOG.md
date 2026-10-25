@@ -2,6 +2,17 @@
 
 Measured numbers are tied to the report files that produced them (`reports/`), so history is kept as written.
 
+## 1.1.0 — 2026-10-25
+
+**Console**
+- Six routed pages (overview, ask, explorer, citation check, study, saved runs) with URL state: `#ask?run=C01` replays
+  a recorded run, `#explorer?tool=…&args=…` re-runs a tool call, `#check?source_id=…&quote=…` re-runs a check.
+- Every claim links into the live citation checker; the agent stream can be stopped mid-run, with an elapsed timer.
+- WAI-ARIA tabs (arrows, Home, End), skip link, live trace region, error boundary, skeleton/empty/error states with
+  retry, copy buttons and toasts; light and dark themes with AA contrast, persisted; CSP header on the console.
+- Playwright end-to-end tests on fixtures captured from the live API, plus an axe WCAG 2 A/AA scan of every page in
+  both themes; runs in CI.
+
 ## 1.0.0 — 2026-10-25
 
 **Second runtime and cross-runtime check**

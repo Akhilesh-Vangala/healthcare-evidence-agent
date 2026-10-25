@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "healthcare-evidence-agent"
-version = "1.0.0"
+version = "1.1.0"
 description = "Governed healthcare evidence agent: Claude Code runtime, 6-tool MCP server, 4 Agent Skills, and programmatic citation verification over FDA labels, ClinicalTrials.gov, and Medicare NCDs."
 readme = "README.md"
 requires-python = ">=3.10"

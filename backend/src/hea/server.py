@@ -24,13 +24,14 @@ import time
 import uuid
 from pathlib import Path
 
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel, Field
+
 from hea import __version__, evidence
 from hea.claude_runner import ROOT
 from hea.limits import Limiter, LimitExceeded, client_id
 from hea.verify import verify_claims
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse, StreamingResponse
-from pydantic import BaseModel, Field
 
 RECORDED = ROOT / "data" / "recorded_runs.jsonl"
 log = logging.getLogger("hea.http")

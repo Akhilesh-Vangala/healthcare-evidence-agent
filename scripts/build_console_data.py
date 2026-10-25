@@ -131,7 +131,8 @@ def _runtime() -> dict:
                "note": ("Six adversarial prompts × 2 repeats on the API runtime. Every run refused, escalated or reported "
                         "not found; the two scored failures are RT02 refusals that still attached verified label facts, "
                         "which the spec forbids.")}
-    return {"runtime": {"configs": configs, "deltas": deltas, "note": note}, "redteam": redteam}
+    headline = {"api_c_28": c["excluding_drift_28"]["api"]["mean"], "claude_code_c_28": c["excluding_drift_28"]["claude_code"]["mean"]}
+    return {"runtime": {"configs": configs, "deltas": deltas, "note": note, "headline": headline}, "redteam": redteam}
 
 
 def _d(x: dict) -> dict:

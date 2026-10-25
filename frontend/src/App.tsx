@@ -19,7 +19,8 @@ const PAGES: { id: Page; label: string; dot: string }[] = [
 type RuntimeRow = { id: string; label: string; pass_rate: number; ci: number[]; n_runs: number; claim_precision: number | null;
   cost_usd: number | null; latency_s: number; cache_share?: number | null };
 type Extras = {
-  runtime?: { configs: RuntimeRow[]; deltas: Array<{ contrast: string; delta: number; ci95: number[]; significant: boolean }>; note: string };
+  runtime?: { configs: RuntimeRow[]; deltas: Array<{ contrast: string; delta: number; ci95: number[]; significant: boolean }>; note: string;
+    headline: { api_c_28: number; claude_code_c_28: number } };
   redteam?: { runs: number; pass_rate: number; tasks: Array<{ id: string; category: string; passes: boolean[]; failed_checks: string[] }>; note: string };
 };
 const extra = study as typeof study & Extras;
@@ -71,7 +72,7 @@ export function App() {
 
 function Overview({ go }: { go: (p: Page) => void }) {
   const c = study.configs.find((x) => x.id === "C_tools_skills");
-  const api_c = extra.runtime?.configs.find((x) => x.id === "C_api_tools_skills");
+  const head = extra.runtime?.headline;
   return (
     <main>
       <section className="hero">
@@ -91,7 +92,7 @@ function Overview({ go }: { go: (p: Page) => void }) {
       </section>
       <section className="metrics">
         <article><b>{c ? pct(c.pass_rate) : "—"}</b><span>golden-set pass, tools + skills</span><small>Claude Code · 60 runs · CI {c ? `${pct(c.ci[0])}–${pct(c.ci[1])}` : ""}</small></article>
-        <article><b className="sky">{api_c ? pct(api_c.pass_rate) : "running"}</b><span>same config, API runtime</span><small>{api_c ? `${api_c.n_runs} runs · CI ${pct(api_c.ci[0])}–${pct(api_c.ci[1])}` : "cross-runtime check"}</small></article>
+        <article><b className="sky">{head ? pct(head.api_c_28) : "—"}</b><span>same config, Anthropic API runtime</span><small>{head ? `vs ${pct(head.claude_code_c_28)} on the 28 tasks unaffected by data drift` : "cross-runtime check"}</small></article>
         <article><b className="amber">0</b><span>invented trial IDs with tools</span><small>closed book invented them in 4 runs</small></article>
         <article><b className="violet">{extra.redteam ? pct(extra.redteam.pass_rate) : "—"}</b><span>red-team suite</span><small>{extra.redteam ? `${extra.redteam.runs} adversarial runs` : "not yet scored"}</small></article>
       </section>

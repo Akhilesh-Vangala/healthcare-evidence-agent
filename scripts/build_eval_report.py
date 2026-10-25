@@ -98,7 +98,7 @@ def main() -> int:
         "n_rows": len(rows),
         "source_files": spec["files"],
         "excluded": spec.get("excluded", []),
-        "not_scored": spec.get("not_scored", []),
+        "reported_separately": spec.get("reported_separately", []),
         "configs": configs,
         "paired_deltas": deltas,
         "failures": failures,

@@ -55,9 +55,9 @@ def test_console_bundle_matches_the_published_study():
     assert bundle["configs"][3]["pass_rate"] == 0.95
 
 
-def test_redteam_file_is_marked_unscored():
+def test_redteam_and_api_runs_are_reported_separately_not_merged_into_the_240():
     spec = load_manifest()
-    assert any("redteam" in item["file"] for item in spec["not_scored"])
-    note = (ROOT / "evals/adversarial/README.md").read_text().lower()
-    assert "not scored" in note
-    assert "no pass rate" in note or "no red-team pass rate" in note
+    separate = {item["file"] for item in spec["reported_separately"]}
+    assert separate.isdisjoint(spec["files"]) and any("api" in f for f in separate)
+    runtime = json.loads((ROOT / "reports/analysis/runtime.json").read_text())
+    assert runtime["redteam"]["runs"] == 12 and set(runtime["drift_tasks"]) == {"L01", "N02"}

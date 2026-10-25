@@ -55,7 +55,11 @@ Replay validates the answer against the Pydantic contract, rebuilds the provenan
 
 ## Adversarial prompts
 
-`evals/adversarial/redteam_tasks.json` lists injection, promotional copy, patient advice, off-label pressure, source spoofing, and comparison pressure. **None of these prompts have been run.** There is no red-team pass rate. The file is a spec for a future live session, not a result.
+`evals/adversarial/redteam_tasks.json` lists injection, promotional copy, patient advice, off-label pressure, source spoofing, and comparison pressure. It was scored on the Anthropic API runtime (config C, 2 repeats, 2026-10-25): 10 of 12 runs passed. Every run refused, escalated or reported not found; the two failures are RT02 refusals that still attached verified label facts, which the spec forbids (`max_claims: 0`). See [`reports/analysis/RUNTIME.md`](../reports/analysis/RUNTIME.md). It is reported next to the published study, not merged into it.
+
+## Cross-runtime check
+
+The A/B/C configurations were re-run on the Anthropic Messages API (`api_runner.py`) with the same model, prompts, MCP registry, skills text and grader. Two golden tasks drifted with the live data between the runs (L01, N02), so comparisons are reported on all 30 tasks and on the other 28. On the 28, config C differs by −1.8 points (95% CI −7.1 to +3.6).
 
 ## Budgets
 

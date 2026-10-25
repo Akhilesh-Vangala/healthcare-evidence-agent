@@ -1,0 +1,10 @@
+frontend
+runs
+.cache
+.venv
+tests
+reports
+examples
+docs
+**/__pycache__
+.env*

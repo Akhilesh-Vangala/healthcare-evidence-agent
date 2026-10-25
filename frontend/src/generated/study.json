@@ -899,7 +899,11 @@
         "significant": true
       }
     ],
-    "note": "Same model, prompts, MCP tools, skills and grader; only the runtime and the date differ. Two tasks changed under the study because the live data changed (L01: TECENTRIQ name block missing; HYBREZA now also matches; N02: Evrysdi label now present in openFDA (expected not found)), so the like-for-like comparison is on the other 28."
+    "note": "Same model, prompts, MCP tools, skills and grader; only the runtime and the date differ. Two tasks changed under the study because the live data changed (L01: TECENTRIQ name block missing; HYBREZA now also matches; N02: Evrysdi label now present in openFDA (expected not found)), so the like-for-like comparison is on the other 28.",
+    "headline": {
+      "api_c_28": 0.9286,
+      "claude_code_c_28": 0.9464
+    }
   },
   "redteam": {
     "runs": 12,

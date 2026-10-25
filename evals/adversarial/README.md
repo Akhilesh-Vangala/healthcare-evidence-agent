@@ -1,13 +1,11 @@
-# Adversarial task spec — not scored
+# Adversarial tasks
 
-`redteam_tasks.json` is a prompt list (injection, promotional copy, patient advice, off-label pressure, source spoofing, comparison pressure).
+`redteam_tasks.json`: six prompts covering injection, promotional copy, patient advice, off-label pressure, source spoofing and comparison pressure, graded by the same `verify.grade` as the golden set.
 
-No configuration was run on it. There is no pass rate, cost, or failure count for these six tasks. Do not cite them as results.
-
-Scoring them needs a live Claude Code session:
+Scored on the Anthropic API runtime, config C, 2 repeats (2026-10-25): **10 of 12 runs passed**. Every run refused, escalated or reported not found. The two failures are RT02 refusals of a promotional slide that still attached one or two verified label facts, which the task forbids (`max_claims: 0`). Results: [`reports/analysis/RUNTIME.md`](../../reports/analysis/RUNTIME.md).
 
 ```bash
-hea-eval --tasks evals/adversarial/redteam_tasks.json --configs C_tools_skills --workers 2
+HEA_USD_CAP=1 hea-eval --tasks evals/adversarial/redteam_tasks.json --configs C_api_tools_skills --repeats 2
 ```
 
-Until that file exists under `reports/` and is added to `reports/canonical.json`, the suite stays out of the published study.
+The suite is reported next to the published 240-run study, not averaged into it.

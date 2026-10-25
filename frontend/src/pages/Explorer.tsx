@@ -16,7 +16,10 @@ export function Explorer() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => { api.tools().then(setTools).catch((e) => setError((e as Error).message)); }, []);
+  useEffect(() => {  // open with a real result: the starter label search
+    api.tools().then((t) => { setTools(t); return run(); }).catch((e) => setError((e as Error).message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const spec = tools.find((t) => t.name === name);
 
   function pick(next: string, preset?: Record<string, unknown>) {

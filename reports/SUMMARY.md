@@ -13,7 +13,7 @@ Headline (task pass, from the published files only): Baseline 20% · A 23% · B 
 
 The excluded file is a same-morning single pass of C at 90%. Pooling it with the 60-run C block is what produced a 93.3% figure that is not a result of either run.
 
-`evals/adversarial/redteam_tasks.json` is not in this table. It has not been run.
+The red-team suite and the cross-runtime re-run on the Anthropic API are reported separately in [`analysis/RUNTIME.md`](analysis/RUNTIME.md) and are not part of the 240.
 
 ```bash
 python scripts/summarize_reports.py

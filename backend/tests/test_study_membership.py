@@ -5,7 +5,7 @@ from pathlib import Path
 
 from hea.analysis.study import load_canonical_rows, load_manifest, published_summaries
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_canonical_rows_are_the_published_240():

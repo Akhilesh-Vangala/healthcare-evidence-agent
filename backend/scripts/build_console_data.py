@@ -10,7 +10,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 from hea.analysis.study import load_manifest, published_summaries  # noqa: E402
@@ -101,7 +101,7 @@ def _trace(folder: str, task_id: str, title: str) -> dict:
 
 
 def _runtime() -> dict:
-    """Cross-runtime check and red-team results, from reports/analysis/runtime.json (scripts/runtime_crosscheck.py)."""
+    """Cross-runtime check and red-team results, from reports/analysis/runtime.json (backend/scripts/runtime_crosscheck.py)."""
     path = ROOT / "reports/analysis/runtime.json"
     if not path.exists():
         return {}

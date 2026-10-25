@@ -38,7 +38,7 @@ One factor changes at a time. The grader and task set are fixed. A second C file
 Regenerate from checked-in reports:
 
 ```bash
-python scripts/build_eval_report.py
+python backend/scripts/build_eval_report.py
 ```
 
 Outputs land in `reports/analysis/` (`stats.json`, `REPORT.md`, figures).

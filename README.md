@@ -19,15 +19,37 @@ A governed AI agent that answers biotech commercial, medical and government-affa
 
 [**Open the console ↗**](https://healthcare-evidence.vercel.app) · [Study](reports/analysis/REPORT.md) · [Cross-runtime check](reports/analysis/RUNTIME.md) · [Methodology](docs/METHODOLOGY.md) · [Architecture](docs/ARCHITECTURE.md) · [For reviewers](docs/FOR_REVIEWERS.md)
 
-The console offers:
-- the agent's own tools, called live
-- a live citation check against the real document
-- replays of recorded real runs
-- the published study
+The console calls the agent's own tools live, runs a live citation check against the real document, replays recorded
+real runs and shows the published study. Live answering runs only where a model key and rate and spend limits are
+configured.
 
-Live answering runs only where a model key and rate and spend limits are configured.
+## At a glance
 
-## Results
+| What was measured | Result |
+|---|---|
+| Golden-set pass rate, tools + skills (240-run study, Claude Haiku 5.5) | **95%** (95% CI 87–100%), vs 20% for a fixed pipeline |
+| Effect of adding MCP tools · then Agent Skills (paired by task) | **+57 pts** [+33, +77] · **+15 pts** [+2, +30] |
+| Invented clinical-trial IDs with tools | **0**, vs 4 runs closed book |
+| Same configuration on a second runtime (Anthropic Messages API, 28 tasks) | 92.9% vs 94.6%, paired −1.8 pts [−7.1, +3.6] |
+| Cost per task with prompt caching · input read from cache | **$0.0033 → $0.0019** · 63% |
+| Claim precision on the API runtime | 97.9% |
+| Red-team suite (injection, promotion, dosing, off-label, spoofing, comparison) | **10 of 12** runs held |
+| Larger model (Sonnet 5.5) instead of Haiku | +1.7 pts, not significant, at about 16× the cost |
+| Tests in CI | 47 pytest (tools mocked) · 20 Playwright + axe WCAG 2 AA · published analysis re-derived from committed reports |
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Agent runtimes | Headless Claude Code (`claude -p`, MCP over stdio) and the Anthropic Python SDK (tool-use loop, prompt caching) |
+| Tools and procedure | MCP server (`mcp` SDK) with six tools; four Agent Skills loaded on demand |
+| Data sources | openFDA drug labels, ClinicalTrials.gov v2, CMS National Coverage Determinations (httpx, cached) |
+| Evaluation | Deterministic grader, paired bootstrap confidence intervals, offline re-grading of saved runs |
+| Service | FastAPI, server-sent events, Upstash Redis rate limits and daily USD cap that fail closed |
+| Console | React 18, TypeScript, Vite; Playwright and axe tests |
+| Infrastructure | Vercel (console and API as separate projects), GitHub Actions |
+
+## Results in detail
 
 ### Published study: 240 runs on headless Claude Code (Claude Haiku 5.5)
 
@@ -121,19 +143,25 @@ make crosscheck                    # reports/analysis/RUNTIME.md from committed 
 ## Repository layout
 
 ```text
-frontend/                 console (React + Vite): ask, evidence explorer, citation check, study, saved runs
+backend/
+  src/hea/
+    claude_runner.py      headless Claude Code runtime
+    api_runner.py         Anthropic Messages API runtime
+    mcp_server.py         6-tool MCP server
+    sources.py            openFDA, ClinicalTrials.gov, CMS (cached, drift-tolerant)
+    verify.py             citation check and task grade
+    server.py, limits.py  HTTP service, rate and spend limits
+    spend.py              hard USD cap for API runs
+    analysis/             paired bootstrap and failure counts
+  tests/                  offline tests: tools mocked, no model
+  scripts/                cross-runtime analysis, console data, recorded runs, plots
+frontend/                 console (React + Vite): overview, ask, evidence explorer, citation check, study, saved runs
+  e2e/                    Playwright flows and axe accessibility scans
 agent/workspace/          Agent Skills used by both runtimes
-backend/src/hea/
-  claude_runner.py        headless Claude Code runtime
-  api_runner.py           Anthropic Messages API runtime
-  mcp_server.py           6-tool MCP server
-  sources.py              openFDA, ClinicalTrials.gov, CMS (cached, drift-tolerant)
-  verify.py               citation check and task grade
-  server.py, limits.py    HTTP service, rate and spend limits
-  spend.py                hard USD cap for API runs
-  analysis/               paired bootstrap and failure counts
+api/index.py              Vercel entry point for the API
 evals/golden/, evals/adversarial/   30 golden and 6 red-team tasks
 reports/                  published runs, cross-runtime and red-team runs, analysis
+examples/                 checked-in agent runs and the trace viewer
 data/recorded_runs.jsonl  real API-runtime runs replayed by the console
 ```
 

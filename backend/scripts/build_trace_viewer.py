@@ -8,7 +8,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 from hea.evidence import load  # noqa: E402
@@ -102,7 +102,7 @@ def main() -> int:
     {''.join(claim_cards)}
     <h2>Evidence log</h2>
     <ul>{''.join(sources)}</ul>
-    <p class="meta">Generated from <code>examples/agent_runs/A01_keytruda_vs_keytruda_qlex</code> via <code>scripts/build_trace_viewer.py</code>. No model call.</p>
+    <p class="meta">Generated from <code>examples/agent_runs/A01_keytruda_vs_keytruda_qlex</code> via <code>backend/scripts/build_trace_viewer.py</code>. No model call.</p>
   </main>
 </body>
 </html>

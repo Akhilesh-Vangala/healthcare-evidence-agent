@@ -6,7 +6,7 @@ install:
 	.venv/bin/pip install -e ".[dev]"
 
 lint:
-	.venv/bin/ruff check backend/src tests scripts
+	.venv/bin/ruff check backend api
 
 test:
 	.venv/bin/pytest -q
@@ -32,8 +32,8 @@ redteam:
 	.venv/bin/hea-eval --tasks evals/adversarial/redteam_tasks.json --configs C_api_tools_skills --repeats 2 --workers 3
 
 crosscheck:      ## reports/analysis/RUNTIME.md from committed reports (no model calls)
-	.venv/bin/python scripts/runtime_crosscheck.py
+	.venv/bin/python backend/scripts/runtime_crosscheck.py
 
 console:         ## regenerate the console's data and build it
-	.venv/bin/python scripts/build_console_data.py
+	.venv/bin/python backend/scripts/build_console_data.py
 	cd frontend && npm ci && npm run build

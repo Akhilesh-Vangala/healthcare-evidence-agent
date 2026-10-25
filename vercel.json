@@ -6,7 +6,7 @@
       "maxDuration": 120,
       "memory": 1024,
       "includeFiles": "{backend/src/**,agent/workspace/.claude/skills/**,data/recorded_runs.jsonl}",
-      "excludeFiles": "{frontend/**,reports/**,examples/**,tests/**,docs/**,runs/**,**/__pycache__/**}"
+      "excludeFiles": "{frontend/**,reports/**,examples/**,backend/tests/**,backend/scripts/**,docs/**,runs/**,**/__pycache__/**}"
     }
   }
 }

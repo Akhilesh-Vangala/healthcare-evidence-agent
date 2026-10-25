@@ -7,7 +7,7 @@ from hea.contracts import parse_answer
 from hea.provenance import build_provenance
 from hea.replay import replay_run
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 EXAMPLE = ROOT / "examples/agent_runs/A01_keytruda_vs_keytruda_qlex"
 
 

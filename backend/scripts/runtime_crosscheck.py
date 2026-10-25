@@ -17,7 +17,7 @@ import random
 import statistics
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CLAUDE_CODE = ROOT / "reports" / "eval-A_closed_book-B_tools_only-C_tools_skills-20260930-115633.json"
 API = ROOT / "reports" / "eval-A_api_closed_book-B_api_tools_only-C_api_tools_skills-20261025-160545.json"
 REDTEAM = ROOT / "reports" / "eval-C_api_tools_skills-20261025-160639.json"

@@ -16,7 +16,7 @@ Grading is fully programmatic (`backend/src/hea/verify.py`). No LLM-as-judge.
 | `C_tools_skills` | Claude Haiku | yes | yes |
 | `D_tools_skills_sonnet` | Claude Sonnet | yes | yes |
 
-Primary ablation (A/B/C × 30 tasks × 2 repeats) = **180 runs**. Adding baseline (30) and Sonnet (30) = **240 runs**. Membership is [`reports/canonical.json`](../reports/canonical.json). `scripts/build_eval_report.py` reads that list and nothing else.
+Primary ablation (A/B/C × 30 tasks × 2 repeats) = **180 runs**. Adding baseline (30) and Sonnet (30) = **240 runs**. Membership is [`reports/canonical.json`](../reports/canonical.json). `backend/scripts/build_eval_report.py` reads that list and nothing else.
 
 ## Headline results
 
@@ -44,10 +44,10 @@ pip install -e ".[dev]"
 # Claude Code signed in, or CLAUDE_BIN set
 hea-eval --configs A_closed_book B_tools_only C_tools_skills --repeats 2 --workers 6
 hea-eval --configs BASELINE D_tools_skills_sonnet --workers 4
-python scripts/summarize_reports.py
+python backend/scripts/summarize_reports.py
 ```
 
-Paired bootstrap CIs are computed over per-task pass means. Regenerate with `python scripts/build_eval_report.py` (canonical files only). Output: `reports/analysis/`.
+Paired bootstrap CIs are computed over per-task pass means. Regenerate with `python backend/scripts/build_eval_report.py` (canonical files only). Output: `reports/analysis/`.
 
 ## What is not a result
 

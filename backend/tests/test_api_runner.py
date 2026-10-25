@@ -4,6 +4,7 @@ import json
 from types import SimpleNamespace
 
 import pytest
+
 from hea import api_runner, evidence
 from hea.spend import BudgetExceeded, SpendCap
 

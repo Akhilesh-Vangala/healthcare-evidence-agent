@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Record real agent runs on the Anthropic API runtime for the console's replay panel.
 
-    HEA_USD_CAP=1 python scripts/record_runs.py C01 V01 T01 R02
+    HEA_USD_CAP=1 python backend/scripts/record_runs.py C01 V01 T01 R02
 
 Each run is the exact event sequence /api/agent/stream emits (start, every model turn and tool call, then the graded
 result), with the model, date and git commit, written to data/recorded_runs.jsonl. Spend goes through spend.SpendCap.

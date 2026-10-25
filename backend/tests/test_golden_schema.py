@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-TASKS = json.loads((Path(__file__).resolve().parents[1] / "evals/golden/agent_tasks.json").read_text())
+TASKS = json.loads((Path(__file__).resolve().parents[2] / "evals/golden/agent_tasks.json").read_text())
 
 
 def test_thirty_tasks_unique_ids():

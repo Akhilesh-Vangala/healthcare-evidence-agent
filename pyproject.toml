@@ -44,10 +44,11 @@ Issues = "https://github.com/Akhilesh-Vangala/healthcare-evidence-agent/issues"
 where = ["backend/src"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["backend/tests"]
 pythonpath = ["backend/src"]
 
 [tool.ruff]
+src = ["backend/src", "backend"]
 line-length = 110
 target-version = "py310"
 
